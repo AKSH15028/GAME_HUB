@@ -2934,11 +2934,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Aksh\\finalgame\\finalgame.csproj",
+      "projectUniqueName": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\BACKEND\\finalgame\\finalgame.csproj",
       "projectName": "finalgame",
-      "projectPath": "C:\\Users\\Aksh\\finalgame\\finalgame.csproj",
+      "projectPath": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\BACKEND\\finalgame\\finalgame.csproj",
       "packagesPath": "C:\\Users\\Aksh\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Aksh\\finalgame\\obj\\",
+      "outputPath": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\BACKEND\\finalgame\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

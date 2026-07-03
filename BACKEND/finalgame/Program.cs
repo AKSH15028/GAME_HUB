@@ -28,6 +28,15 @@ else
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy => policy.WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+});
+// Add this after builder.Build()
+app.UseCors("AllowAngular");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

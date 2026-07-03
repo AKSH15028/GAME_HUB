@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cs/JNpJSKPA=",
+  "dgSpecHash": "XnocqxF912o=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Aksh\\finalgame\\finalgame.csproj",
+  "projectFilePath": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\BACKEND\\finalgame\\finalgame.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Aksh\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Aksh\\.nuget\\packages\\microsoft.build.framework\\18.0.2\\microsoft.build.framework.18.0.2.nupkg.sha512",
@@ -49,9 +49,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "finalgame depends on SQLitePCLRaw.bundle_e_sqlite3 (>= 2.1.13) but SQLitePCLRaw.bundle_e_sqlite3 2.1.13 was not found. SQLitePCLRaw.bundle_e_sqlite3 3.0.0 was resolved instead.",
-      "projectPath": "C:\\Users\\Aksh\\finalgame\\finalgame.csproj",
+      "projectPath": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\BACKEND\\finalgame\\finalgame.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\Aksh\\finalgame\\finalgame.csproj",
+      "filePath": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\BACKEND\\finalgame\\finalgame.csproj",
       "libraryId": "SQLitePCLRaw.bundle_e_sqlite3",
       "targetGraphs": [
         "net10.0"
