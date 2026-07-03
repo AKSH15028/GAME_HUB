@@ -1,0 +1,21 @@
+<header class="top-nav">
+  <div class="logo-area">
+    <a routerLink="/" class="logo-link">
+      <span class="logo-icon">🎮</span>
+      <h2 class="platform-name">GameHub</h2>
+    </a>
+  </div>
+ 
+  <div *ngIf="isLoggedIn()">
+    <button routerLink="/profile" class="profile-circle">
+      <img src="user-icon.png" alt="Profile">
+    </button>
+  </div>
+  
+
+<div *ngIf="!isLoggedIn()" class="user-area">
+  <button class="btn-login" routerLink="/login">Login</button>
+  <button class="btn-signup" routerLink="/signup">Sign Up</button>
+</div>
+
+</header>

@@ -1,0 +1,72 @@
+/* Container holds the full page and centers the form */
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  /* Use your background image here */
+  background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
+  background-size: cover;
+  padding-top: 80px; /* Adds space so the header doesn't overlap the card */
+  box-sizing: border-box;
+}
+
+/* Glassmorphism styling */
+.glass-card {
+  background: rgba(20, 20, 20, 0.75);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.glass-card h2 { margin-bottom: 25px; font-size: 1.8rem; }
+
+/* Form Group styling */
+.form-group { text-align: left; margin-bottom: 15px; }
+
+label { display: block; margin-bottom: 5px; color: #ccc; font-size: 0.85rem; }
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ff4757;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Button styling */
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: #ff4757;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.btn-submit:hover { background: #ff6b81; transform: translateY(-2px); }
+
+/* Redirect link */
+.redirect-text { margin-top: 20px; color: #aaa; font-size: 0.9rem; }
+.redirect-text a { color: #ff4757; text-decoration: none; font-weight: bold; }
+.redirect-text a:hover { text-decoration: underline; }

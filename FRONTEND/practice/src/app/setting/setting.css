@@ -1,0 +1,57 @@
+.settings-page {
+  display: flex;
+  min-height: 100vh;
+  padding: 20px;
+  background: radial-gradient(circle at top right, #1a1a2e, #0f0f1a); /* Background */
+}
+
+.settings-container {
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.05); /* Glass base */
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 40px;
+  color: white;
+}
+
+.glass-card {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar {
+  width: 200px;
+  padding-right: 20px;
+}
+
+.sidebar li {
+  list-style: none;
+  padding: 15px;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.sidebar li.active {
+  color: white;
+  border-left: 3px solid #7b2cbf;
+}
+
+.btn-action {
+  background: #7b2cbf;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
