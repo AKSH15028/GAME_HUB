@@ -1,0 +1,180 @@
+/* Container for the whole header */
+/*------------------------------------------------------------header css---------------------------------------------------------------------------*/
+.header {
+  display: flex;
+  justify-content: space-between; /* Pushes logo left, links right */
+  align-items: center;
+  padding: 15px 40px;
+  background-color: #0a1120;
+  border-bottom: 1px solid #00f2ff;
+  color: #ffffff;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon { font-size: 24px; }
+
+/* Navigation links */
+.nav-links {
+  display: flex;
+  gap: 30px; /* Space between links */
+}
+
+.nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #00f2ff;
+  text-shadow: 0 0 8px #00f2ff;
+}
+
+/* Specific style for Logout button */
+.logout-btn {
+  border: 1px solid #00f2ff;
+  padding: 5px 15px;
+  border-radius: 5px;
+}
+
+.logout-btn:hover {
+  background: rgba(0, 242, 255, 0.1);
+}
+
+/* -----------------------------------------------------Profile page styles---------------------------------------------------*/
+.profile-container {
+  background: #050a14;
+  min-height: 100vh;
+  padding: 40px;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.profile-header {
+  background: rgba(16, 26, 46, 0.6);
+  border: 1px solid #00f2ff;
+  display: flex;
+  align-items: center;
+  padding: 30px;
+  border-radius: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+}
+
+.profile-avatar {
+  font-size: 60px;
+  margin-right: 25px;
+}
+/*------------------------------------------------------game card css---------------------------------------------------------------*/
+.profile-container {
+  background: #050a14;
+  min-height: 100vh;
+  padding: 40px;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.profile-header {
+  background: rgba(16, 26, 46, 0.6);
+  border: 1px solid #00f2ff;
+  display: flex;
+  align-items: center;
+  padding: 30px;
+  border-radius: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+}
+
+.profile-avatar { font-size: 60px; margin-right: 25px; }
+
+.game-dashboard {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.game-card {
+  background: linear-gradient(180deg, #101a2e, #0a1120);
+  border: 1px solid #00f2ff;
+  border-radius: 15px;
+  padding: 25px;
+  flex: 1;
+  min-width: 300px;
+  height: 300px;
+  transition: transform 0.3s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  font-size: 0.95rem;
+}
+
+.stats-row strong { color: #ffffff; }
+
+.progress-bar {
+  background: #0a1120;
+  height: 8px;
+  border-radius: 4px;
+  margin-top: 15px;
+}
+
+.fill {
+  background: #00f2ff;
+  height: 100%;
+  border-radius: 4px;
+  box-shadow: 0 0 10px #00f2ff;
+}
+
+h1 { color: #fff; margin: 0; }
+.handle { color: #00f2ff; font-weight: bold; }
+/*-----------------------------------------------------stats card css---------------------------------------------------*/
+.stats-section {
+  padding: 40px;
+  color: #fff;
+}
+
+.stats-content {
+  display: flex;
+  gap: 50px;
+  background: rgba(16, 26, 46, 0.6);
+  padding: 30px;
+  border-radius: 15px;
+  border: 1px solid #1a2a4a;
+}
+
+.game-activity { flex: 1; }
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.graph-container {
+  flex: 2;
+  border-left: 1px solid #1a2a4a;
+  padding-left: 30px;
+}
+
+/* Star rating style */
+.stars { color: #00f2ff; letter-spacing: 2px; }
+
+.graph-container {
+  position: relative;
+  height: 400px; /* Adjust as needed */
+  width: 100%;
+}

@@ -1,1 +1,108 @@
-<p>profile works!</p>
+  <!--header section-->
+<header class="header">
+  <div class="logo">
+    <span class="logo-icon"href="/home">🎮</span>
+    <h1 href="/home">GAME HUB</h1>
+  </div>
+  
+  <nav class="nav-links">
+    <a href="/home">HOME</a>
+    <a href="/profile">MY PROFILE</a>
+    <a href="/settings">SETTINGS</a>
+    <a href="/logout" class="logout-btn">LOGOUT</a>
+  </nav>
+</header>
+  <!--player profile section-->
+<div class="profile-container">
+  
+  <header class="profile-header">
+    <div class="profile-avatar">👤</div>
+    <div class="user-details">
+      <h1>Username</h1>
+      <p class="handle">User's Game Handle</p>
+      <p class="email">Email Id.</p>
+    </div>
+  </header>
+  <!--player game card section-->
+  <div class="game-dashboard">
+    <div class="game-card" >
+      <h3>1game name</h3>
+      <div class="stats-row"><span>High Score:</span>  developing</div>
+      <div class="stats-row"><span>Total Games:</span> developing </div>
+      <div class="stats-row"><span>Progress:</span>  developing</div>
+      
+      <div class="progress-bar">
+        <div class="fill" ></div>
+      </div>
+    </div>
+    <div class="game-card" >
+      <h3>2game name</h3>
+      <div class="stats-row"><span>High Score:</span>  developing</div>
+      <div class="stats-row"><span>Total Games:</span> developing </div>
+      <div class="stats-row"><span>Progress:</span>  developing</div>
+      
+      <div class="progress-bar">
+        <div class="fill" ></div>
+      </div>
+    </div>
+    <div class="game-card" >
+      <h3>3game name</h3>
+      <div class="stats-row"><span>High Score:</span>  developing</div>
+      <div class="stats-row"><span>Total Games:</span> developing </div>
+      <div class="stats-row"><span>Progress:</span>  developing</div>
+      
+      <div class="progress-bar">
+        <div class="fill" ></div>
+      </div>
+    </div>
+  </div>
+  <!--player stats section-->
+<section class="stats-section">
+  <h2>PLAYER STATS & ACHIEVEMENTS</h2>
+  
+  <div class="stats-content">
+    <!-- Achievement List -->
+    <div class="game-activity">
+      <h3>Game Activity</h3>
+      <div class="achievement-item">
+        <span class="icon">🏆</span>
+        <div class="info">
+          <p>Recent Achievements</p>
+          <div class="stars">★★★★☆</div>
+        </div>
+      </div>
+      <div class="achievement-item">
+        <span class="icon">🏆</span>
+        <div class="info">
+          <p>Recent Achievements</p>
+          <div class="stars">★★★★☆</div>
+        </div>
+      </div>
+      <div class="achievement-item">
+        <span class="icon">🏆</span>
+        <div class="info">
+          <p>Recent Achievements</p>
+          <div class="stars">★★★★☆</div>
+        </div>
+      </div>
+    </div>
+
+   
+    <!-- Graph Container -->
+<div class="graph-container">
+    <h3>Total Score Over Time</h3>
+    <canvas id="scoreChart"></canvas>
+</div>
+
+<!-- Use the script tag to point to your local installation -->
+<script src="./node_modules/chart.js/dist/chart.umd.js"></script>
+
+<script>
+    // Now you can use the 'Chart' object globally
+    const ctx = document.getElementById('scoreChart');
+    new Chart(ctx, { 
+        type: 'line', // Make sure to define the type
+        data: { /* your data */ },
+        options: { /* your options */ }
+    });
+</script>
