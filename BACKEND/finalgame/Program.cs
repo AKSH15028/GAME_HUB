@@ -32,6 +32,7 @@ else
 }
 // Add this after builder.Build()
 app.UseCors("AllowAngular");
+app.UseCors("AllowAngular");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

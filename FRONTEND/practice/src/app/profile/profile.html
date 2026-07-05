@@ -1,8 +1,8 @@
   <!--header section-->
 <header class="header">
   <div class="logo">
-    <span class="logo-icon"href="/home">🎮</span>
-    <h1 href="/home">GAME HUB</h1>
+    <span class="logo-icon"><a href="/home">🎮</a></span>
+    <h1><a href="/home">GAME HUB</a></h1>
   </div>
   
   <nav class="nav-links">
@@ -16,13 +16,17 @@
 <div class="profile-container">
   
   <header class="profile-header">
-    <div class="profile-avatar">👤</div>
-    <div class="user-details">
-      <h1>Username</h1>
-      <p class="handle">User's Game Handle</p>
-      <p class="email">Email Id.</p>
-    </div>
-  </header>
+  <div class="profile-avatar">👤</div>
+  
+  <!-- Use *ngIf to ensure the page doesn't crash while data is loading -->
+  <div class="user-details" *ngIf="user">
+    <h1>{{ user.username }}</h1>
+    <p class="handle">ID: {{ user.id }}</p>
+    <p class="email">{{ user.email }}</p>
+  </div>
+
+  
+</header>
   <!--player game card section-->
   <div class="game-dashboard">
     <div class="game-card" >
