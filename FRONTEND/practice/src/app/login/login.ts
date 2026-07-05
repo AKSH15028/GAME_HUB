@@ -22,7 +22,7 @@ export class Login {
 
   onLogin() {
     // Now these will not have squiggly lines
-    console.log('Logging in with:', this.email, this.password);
+   
     
     // Store the token (for now)
     localStorage.setItem('userToken', 'authenticated');

@@ -1,57 +1,282 @@
 .settings-page {
-  display: flex;
-  min-height: 100vh;
-  padding: 20px;
-  background: radial-gradient(circle at top right, #1a1a2e, #0f0f1a); /* Background */
+  display: flex; /* Aligns children side-by-side */
+  width: 100vw;  /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  margin: 0;
+  padding: 0;
 }
 
-.settings-container {
-  flex-grow: 1;
-  background: rgba(255, 255, 255, 0.05); /* Glass base */
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 40px;
+.content-container {
+  flex-grow: 1;  /* KEY: This makes it expand to fill all remaining space */
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #0a1618; /* Ensure this matches your dark theme */
   color: white;
 }
-
-.glass-card {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 16px;
+/* ------------------------------------------sidebarStyles ------------------------------------------------*/
+/* Sidebar Container */
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #1a3a3d 0%, #0d1b1d 100%);
+  color: #a0b4b8;
+  height: 100vh;
   padding: 20px;
-  margin-top: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: sans-serif;
 }
 
-.setting-item {
+/* Logo Area */
+.logo-area {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.logo-circle {
+  width: 80px;
+  height: 80px;
+  background: #2c4c4f;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+.logo-area h1 { color: #ffffff; font-size: 20px; margin: 0; }
+
+/* List Items */
+.sidebar ul { list-style: none; padding: 0; }
+.sidebar li {
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Active State */
+.sidebar li.active {
+  background: #008080; /* Teal color from image */
+  color: #ffffff;
+  border-left: 4px solid #00f0f0;
+}
+
+/* Submenu Styling */
+.submenu { padding-left: 20px !important; font-size: 0.9em; }
+.has-submenu span { float: right; }
+
+.sidebar li:hover { color: #ffffff; }
+/* Enable smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Give the container a fixed height and enable internal scrolling */
+.content-container {
+  height: 100vh;      /* Takes up full screen height */
+  overflow-y: auto;   /* Allows scrolling within this area */
+}
+
+/* Ensure each section has enough height for the scroll effect */
+.section {
+  min-height: 100vh;  /* Each section fills the screen */
+  padding: 50px;
+}
+
+/* notification setting */
+
+/* 1. Ensure the container fills the right area next to the sidebar */
+#notifications {
+  padding: 40px;
+  background-color: #0a1618;
+  color: white;
+  min-height: 100vh;
+  /* Ensure this container stays to the right by being a flex-item */
+  flex-grow: 1; 
+}
+
+/* 2. Enhanced Card Styling (Matching the reference aesthetic) */
+.notification-card {
+  /* Using rgba for that 'glass' transparency */
+  background: rgba(26, 58, 61, 0.6); 
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(44, 76, 79, 0.8);
+  border-radius: 15px; /* More rounded corners */
+  padding: 25px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
-  padding: 15px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+  transition: 0.4s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-.sidebar {
-  width: 200px;
-  padding-right: 20px;
+/* 3. Neon Hover Effect */
+.notification-card:hover {
+  border-color: #00f0f0;
+  box-shadow: 0 0 15px rgba(0, 240, 240, 0.2);
 }
 
-.sidebar li {
-  list-style: none;
-  padding: 15px;
+.notif-text h4 {
+  margin: 0 0 8px 0;
+  color: #ffffff; /* White title like in the image */
+  font-size: 1.1em;
+}
+
+.notif-text p {
+  margin: 0;
+  font-size: 0.95em;
+  color: #a0b4b8;
+}
+
+/* 4. Styled Toggle Switch (Modern look) */
+input[type="checkbox"] {
+  appearance: none;
+  width: 50px;
+  height: 25px;
+  background: #0d1b1d;
+  border: 1px solid #2c4c4f;
+  border-radius: 20px;
+  position: relative;
   cursor: pointer;
-  color: #aaa;
+  transition: 0.3s;
 }
 
-.sidebar li.active {
-  color: white;
-  border-left: 3px solid #7b2cbf;
+input[type="checkbox"]:checked {
+  background: #008080;
+  border-color: #00f0f0;
+}
+/* ------------------------------------------accountStyles ------------------------------------------------*/
+.account-card {
+  background: rgba(26, 58, 61, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(44, 76, 79, 0.8);
 }
 
-.btn-action {
-  background: #7b2cbf;
+.account-field { margin-bottom: 20px; }
+.account-field label { display: block; margin-bottom: 8px; color: #a0b4b8; }
+.account-field input, .account-field textarea {
+  width: 100%;
+  padding: 12px;
+  background: #0d1b1d;
+  border: 1px solid #2c4c4f;
+  border-radius: 8px;
   color: white;
+  box-sizing: border-box; /* Ensures padding doesn't break layout */
+}
+
+.danger-btn {
+  background: #5a1a1a;
+  color: #ff6b6b;
   border: none;
   padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.danger-btn:hover { background: #7a2a2a; }
+/* ------------------------------------------log outStyles ------------------------------------------------*/
+.logout-card {
+  background: rgba(26, 58, 61, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(44, 76, 79, 0.8);
+  border-radius: 15px;
+  padding: 40px;
+  max-width: 500px;
+  text-align: center;
+}
+
+.sub-text {
+  color: #a0b4b8;
+  font-size: 0.9em;
+  margin-bottom: 30px;
+}
+
+.logout-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.confirm-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cancel-btn {
+  background: transparent;
+  color: #00f0f0;
+  border: 1px solid #00f0f0;
+  padding: 12px 24px;
   border-radius: 8px;
   cursor: pointer;
 }
+
+.cancel-btn:hover { background: rgba(0, 240, 240, 0.1); }
+.confirm-btn:hover { background: #d93636; }
+/* ------------------------------------------themeStyles ------------------------------------------------*/
+/* Container styling */
+#appearance {
+  padding: 40px;
+  background-color: #0a1618;
+  color: white;
+}
+
+/* Card styling */
+.appearance-card {
+  background: #1a3a3d;
+  border: 1px solid #2c4c4f;
+  border-radius: 10px;
+  padding: 30px;
+  max-width: 500px;
+}
+
+/* Option grouping */
+.appearance-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.appearance-option h4 { margin: 0 0 5px 0; color: #00f0f0; }
+.appearance-option p { margin: 0; font-size: 0.85em; color: #a0b4b8; }
+
+/* Select and Range inputs */
+.theme-select {
+  padding: 8px 12px;
+  background: #0d1b1d;
+  color: white;
+  border: 1px solid #2c4c4f;
+  border-radius: 5px;
+}
+
+input[type="range"] {
+  cursor: pointer;
+  accent-color: #00f0f0;
+}
+/* ------------------------------------------font-sizeStyles ------------------------------------------------*/
+/* Add this to your main CSS file */
+html {
+  /* This allows the entire page to scale when the root font size changes */
+  font-size: 16px; 
+}
+
+body {
+  /* Use rem units throughout your site so they scale with the html font-size */
+  font-size: 1rem; 
+}
+
+/* Ensure your text elements use rem or inherit font-size */
+h2 { font-size: 2rem; }
+h4 { font-size: 1.25rem; }
+p { font-size: 1rem; }
+
+
+
+
+

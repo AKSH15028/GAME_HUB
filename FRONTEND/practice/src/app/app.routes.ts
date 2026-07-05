@@ -1,3 +1,5 @@
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { ApplicationConfig } from '@angular/core';
 import { Routes } from '@angular/router';
 import { Login } from './login/login';
 import { Signup } from './signup/signup';
@@ -6,6 +8,7 @@ import { accessGuard } from './access-guard';
 import { Game } from './game/game';
 import { Setting } from './setting/setting';
 import { Profile } from './profile/profile';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -16,3 +19,14 @@ export const routes: Routes = [
   { path: 'settings', component: Setting },
   { path: 'profile', component: Profile }
 ];
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(
+      routes, 
+      withInMemoryScrolling({
+        anchorScrolling: 'enabled', // This allows the # links to work
+        scrollPositionRestoration: 'enabled'
+      })
+    )
+  ]
+};

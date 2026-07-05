@@ -1,39 +1,138 @@
 <div class="settings-page">
+  <!--side-bar section-->
   <nav class="sidebar">
+    <div class="logo-area">
+      <div class="logo-circle">🎮</div>
+      <h1>GAME HUB</h1>
+    </div>
     <ul>
-      <li class="active">Security</li>
-      <li>Privacy</li>
-      <li>Notifications</li>
-      <li>Appearance</li>
+  <!-- Redirects to a new page -->
+  <li><a href="/home">Home</a></li>
+  <li><a href="/profile">Profile</a></li>
+  
+  <!-- Scrolls to the section on the same page -->
+<!-- Instead of just #notifications, use the current page path + #id -->
+<li><a href="/settings#notifications">Notifications</a></li>
+<li><a href="/settings#account">Account</a></li>
+
+  
+  <li class="has-submenu">
+    Appearance <span>^</span>
+    <ul class="submenu">
+      <li><a href="/settings#appearance">Theme</a></li>
+      <li><a href="/settings#appearance">Font Size</a></li>
     </ul>
+  </li>
+  <li>Developer</li>
+  <li>Terms & condition</li>
+  <li><a href="/settings#logout">Logout</a></li>
+</ul>
   </nav>
 
-  <main class="settings-container">
-    <header>
-      <h1>Settings</h1>
-      <p>Manage your account, security, privacy and platform preferences</p>
-    </header>
-
-    <div class="settings-grid">
-      <section class="glass-card">
-        <h3>Security</h3>
-        <div class="setting-item">
-          <span>Change Password</span>
-          <button class="btn-action">Update</button>
-        </div>
-        <div class="setting-item">
-          <span>Two-Factor Authentication</span>
-          <span class="status-enabled">Enabled</span>
-        </div>
-      </section>
-
-      <section class="glass-card">
-        <h3>Appearance</h3>
-        <div class="theme-options">
-          <div class="theme-box">Dark</div>
-          <div class="theme-box">Light</div>
-        </div>
-      </section>
+  <!-- Content Sections -->
+  <div class="content-container">
+    <div id="notifications" class="section">
+      <h2>Notifications</h2>
+      <h2>Notification Settings</h2>
     </div>
-  </main>
+
+    <div id="account" class="section">
+  <h2>Account Settings</h2>
+  
+  <!-- Profile Picture & Basic Info -->
+  <div class="account-card">
+    <div class="account-field">
+      <label>Profile Picture</label>
+      <div class="profile-upload">
+        <div class="avatar-preview">🎮</div>
+        <button class="small-btn">Change Avatar</button>
+      </div>
+    </div>
+
+    <div class="account-field">
+      <label>Display Name</label>
+      <input type="text" placeholder="Vanshika Khinchi">
+    </div>
+    
+    <div class="account-field">
+      <label>Bio</label>
+      <textarea placeholder="Mastering the craft, one level at a time."></textarea>
+    </div>
+  </div>
+
+  <!-- Security Settings -->
+  <div class="account-card">
+    <h3>Security</h3>
+    <div class="account-field">
+      <label>Email Address</label>
+      <input type="email" placeholder="aksh.vashishtha@email.com">
+    </div>
+    
+    <div class="account-field">
+      <label>Change Password</label>
+      <input type="password" placeholder="Current Password">
+      <input type="password" placeholder="New Password">
+    </div>
+    
+    <button class="save-btn">Update Account</button>
+  </div>
+
+  <!-- Single-Player Data Management -->
+  <div class="account-card">
+    <h3>Data Management</h3>
+    <div class="account-option">
+      <div>
+        <h4>Sync Progress</h4>
+        <p>Keep your saves backed up to the cloud.</p>
+      </div>
+      <input type="checkbox" checked>
+    </div>
+    <div class="account-option" style="margin-top: 15px;">
+      <div>
+        <h4>Reset Stats</h4>
+        <p>Clear all local game progress and achievements.</p>
+      </div>
+      <button class="danger-btn">Reset</button>
+    </div>
+  </div>
+</div>
+
+<div id="logout" class="section">
+  <h2>Logout</h2>
+  <div class="logout-card">
+    <p>Are you sure you want to sign out of your account?</p>
+    <p class="sub-text">You will need to re-enter your credentials to access your progress next time.</p>
+    
+    <div class="logout-actions">
+      <button class="cancel-btn">Stay Logged In</button>
+      <button (click)="onLogout()">Log Out</button>
+    </div>
+  </div>
+</div>
+
+    <div id="appearance" class="section">
+      <h2>Appearance</h2>
+      <div class="appearance-card">
+        <div class="appearance-option">
+          <div>
+            <h4>Theme Mode</h4>
+            <p>Switch between dark and light themes.</p>
+          </div>
+          <select class="theme-select">
+            <option value="dark">Dark Mode</option>
+            <option value="light">Light Mode</option>
+          </select>
+        </div>
+
+        <div class="appearance-option">
+          <div>
+            <h4>Font Size</h4>
+            <p>Adjust the text scale for better readability.</p>
+          </div>
+          <input type="range" min="12" max="24" value="16" 
+                 oninput="document.documentElement.style.fontSize = this.value + 'px'">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

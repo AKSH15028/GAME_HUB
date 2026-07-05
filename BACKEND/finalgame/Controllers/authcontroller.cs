@@ -88,5 +88,14 @@ namespace finalgame.Controllers
             // Implementation: Use BCrypt.Net or PasswordHasher<T> here
             return true; // Simplified placeholder
         }
+
+    [HttpPost("logout")]
+public IActionResult Logout()
+{
+    // Logic to blacklist the token or clear the authentication cookie
+    // Example: Response.Cookies.Delete("your_auth_cookie_name");
+    return Ok(new { message = "Logged out successfully" });
+}
+
     }
 }

@@ -1,9 +1,31 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
-@Component({
+@Component({ 
   selector: 'app-setting',
-  imports: [],
+  standalone: true, // Assuming you are using standalone components based on your folder structure
+  imports: [HttpClientModule], // Ensure HttpClientModule is imported if needed
   templateUrl: './setting.html',
-  styleUrl: './setting.css',
-})
-export class Setting {}
+  styleUrls: ['./setting.css']
+ })
+export class Setting {
+  // Inject HttpClient and Router
+  constructor(private http: HttpClient, private router: Router) {}
+
+  onLogout() {
+    // Call your backend logout endpoint
+    this.http.post('http://localhost:5238/api/auth/logout', {}).subscribe({
+      next: () => {
+        // Clear local data and redirect
+        localStorage.clear();
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Logout failed', err);
+        // Optional: still redirect or show error
+      }
+    });
+  }
+}
