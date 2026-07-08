@@ -18,12 +18,11 @@
   <header class="profile-header">
   <div class="profile-avatar">👤</div>
   
-  <!-- Use *ngIf to ensure the page doesn't crash while data is loading -->
-  <div class="user-details" *ngIf="user">
-    <h1>{{ user.username }}</h1>
-    <p class="handle">ID: {{ user.id }}</p>
-    <p class="email">{{ user.email }}</p>
-  </div>
+<div class="user-details" *ngIf="user">
+  <h1>{{ user?.username }}</h1>
+  <p class="handle">ID: {{ user?.id }}</p>
+  <p class="email">{{ user?.email }}</p>
+</div>
 
   
 </header>

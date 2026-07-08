@@ -18,7 +18,7 @@ export class Header {
 
   isLoggedIn(): boolean {
     if (!this.isBrowser) return false;
-    return localStorage.getItem('userToken') !== null;
+    return localStorage.getItem('user') !== null;
   }
 
   openProfile() {

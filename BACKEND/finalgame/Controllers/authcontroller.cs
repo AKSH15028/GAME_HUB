@@ -59,7 +59,12 @@ namespace finalgame.Controllers
 
             // 2. Generate and return the JWT token
             var token = GenerateJwtToken(user);
-            return Ok(new { token = token });
+            return Ok(new { 
+            token = token, 
+            id = user.Id, 
+            username = user.Username, 
+            email = user.Email 
+            });
         }
 
         private string GenerateJwtToken(User user)
@@ -69,9 +74,10 @@ namespace finalgame.Controllers
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[] {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Standard claim for ID
+            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+};
 
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
