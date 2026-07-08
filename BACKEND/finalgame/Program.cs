@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using finalgame.Data; // Ensure this matches your namespace for the DbContext
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("AppDbContext") ?? throw new InvalidOperationException("Connection string 'AppDbContext' not found.");
-// 1. Add Services to the container.
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));// 1. Add Services to the container.
 builder.Services.AddControllersWithViews();
 // 2. Add SQLite Database Context
 builder.Services.AddDbContext<AppDbContext>(options =>
