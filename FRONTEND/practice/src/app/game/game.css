@@ -200,6 +200,19 @@
     transition:.3s;
 }
 
+
+.play-now-button {
+  /* Keep your existing styles here */
+  
+  /* Add these to center the text */
+  display: flex;
+  align-items: center; /* Vertically centers the text */
+  justify-content: center; /* Horizontally centers the text */
+  
+  /* Ensure these are present to fix the previous issue */
+  text-decoration: none; 
+  padding: 10px 20px; /* Adjust padding to match your previous button size */
+}
 .play-now-button:hover{
 
     transform:scale(1.08);

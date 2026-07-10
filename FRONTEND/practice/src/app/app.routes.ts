@@ -8,6 +8,7 @@ import { accessGuard } from './access-guard';
 import { Game } from './game/game';
 import { Setting } from './setting/setting';
 import { ProfileComponent } from './profile/profile';
+import { Game1 } from './game1/game1';
 
 
 
@@ -18,7 +19,8 @@ export const routes: Routes = [
   { path: 'home', component: Homepage },
   { path: 'game', component: Game , canActivate: [accessGuard] }, // use access guard, canActivate: [accessGuard]
   { path: 'settings', component: Setting },
-  { path: 'profile', component: ProfileComponent }
+  { path: 'profile', component: ProfileComponent },
+  {path: 'game1', component: Game1} // use access guard, canActivate: [accessGuard]
 ];
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -1,0 +1,152 @@
+/*header css*/
+/* Container sizing and background setup */
+.scoreboard-wrapper {
+  background-color: #1a1d24; /* Dark canvas background */
+  padding: 20px;
+  
+  margin: 0 auto;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  text-align: center;
+  width: 100vw;       /* Forces it to take up the full viewport width */
+  margin-left: 0;     /* Removes any left margins */
+  margin-right: 0;
+}
+
+/* Header Text styling */
+.game-title {
+  color: #a0aec0;
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin: 0 0 16px 0;
+  letter-spacing: 0.5px;
+}
+
+/* Outer Neon Capsule Frame */
+.stats-capsule {
+  background-color: #22262f; /* Slightly lighter inner background */
+  border: 1.5px solid #00ffaa33; 
+  
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 14px 10px;
+  /* Multi-layered glow for that authentic cyber/neon look */
+  box-shadow: 
+    0 0 15px rgba(0, 255, 170, 0.15),
+    inset 0 0 10px rgba(0, 255, 170, 0.05);
+}
+
+/* Stat Box Item Column Alignment */
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+/* Top Muted Labels */
+.stat-label {
+  font-size: 0.7rem;
+  color: #626b7c;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Bottom Bold Numbers */
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* Divider Lines */
+.vertical-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Glowing Neon Color Variables */
+.neon-green {
+  color: #00ffaa;
+  text-shadow: 0 0 8px rgba(0, 255, 170, 0.5);
+}
+
+.neon-cyan {
+  color: #00e5ff;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+}
+/*-------------------------------------strike section or life section----------------------------------------------------*/
+/* Container background setup */
+.strikes-wrapper {
+  background-color: #1a1d24; /* Dark canvas background matching your theme */
+  padding: 20px;
+  display: flex;
+  width: 100vw;       /* Forces it to take up the full viewport width */
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Small uppercase header label */
+.strikes-label {
+  font-size: 0.7rem;
+  color: #626b7c; /* Muted slate gray */
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Row wrapper for the circles */
+.strikes-row {
+  display: flex;
+  gap: 12px;
+}
+
+/* Base circle for each life/strike */
+.strike-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+/* Center 'X' character alignment */
+.x-icon {
+  font-size: 0.95rem;
+  font-weight: bold;
+}
+
+/* State 1: Active Strike (The glowing cyan indicator from your image) */
+.strike-circle.active {
+  border: 1.5px solid #00e5ff;
+  color: #00e5ff;
+  background-color: rgba(0, 229, 255, 0.03);
+  /* Cyber neon outer and inner aura glow */
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.4),
+    inset 0 0 6px rgba(0, 229, 255, 0.2);
+}
+
+/* State 2: Empty Strike (Dimmed out background slot) */
+.strike-circle.empty {
+  border: 1.5px solid #252a34;
+  color: #252a34;
+  background-color: transparent;
+}
+
+/* Optional State: Failed Strike (If you want to turn it Pink/Red upon a wrong selection) */
+.strike-circle.failed {
+  border: 1.5px solid #ff3366;
+  color: #ff3366;
+  background-color: rgba(255, 51, 102, 0.05);
+  box-shadow: 0 0 8px rgba(255, 51, 102, 0.2);
+}
+
+
+
