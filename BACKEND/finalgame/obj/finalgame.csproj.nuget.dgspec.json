@@ -1,24 +1,7 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< HEAD
     "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\backend\\finalgame\\finalgame.csproj": {}
-=======
-<<<<<<< HEAD
-    "C:\\Users\\HP Intel i5\\Documents\\GitHub\\GAME_HUB\\BACKEND\\finalgame\\finalgame.csproj": {}
-  },
-  "projects": {
-    "C:\\Users\\HP Intel i5\\Documents\\GitHub\\GAME_HUB\\BACKEND\\finalgame\\finalgame.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\HP Intel i5\\Documents\\GitHub\\GAME_HUB\\BACKEND\\finalgame\\finalgame.csproj",
-        "projectName": "finalgame",
-        "projectPath": "C:\\Users\\HP Intel i5\\Documents\\GitHub\\GAME_HUB\\BACKEND\\finalgame\\finalgame.csproj",
-        "packagesPath": "C:\\Users\\HP Intel i5\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP Intel i5\\Documents\\GitHub\\GAME_HUB\\BACKEND\\finalgame\\obj\\",
-=======
-    "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\BACKEND\\FINALGAME\\finalgame.csproj": {}
->>>>>>> 309d321ecc5be3faa6e46d7aa5fc931638887756
   },
   "projects": {
     "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\backend\\finalgame\\finalgame.csproj": {
@@ -28,18 +11,13 @@
         "projectName": "finalgame",
         "projectPath": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\backend\\finalgame\\finalgame.csproj",
         "packagesPath": "C:\\Users\\Aksh\\.nuget\\packages\\",
-<<<<<<< HEAD
         "outputPath": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\backend\\finalgame\\obj\\",
-=======
-        "outputPath": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\BACKEND\\FINALGAME\\obj\\",
->>>>>>> 6bb24e1ba718c0676c3b5a1963fcd63c21358448
->>>>>>> 309d321ecc5be3faa6e46d7aa5fc931638887756
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\HP Intel i5\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Aksh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
