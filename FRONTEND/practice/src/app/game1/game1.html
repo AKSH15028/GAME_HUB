@@ -1,13 +1,15 @@
-<div class="game-container">
-  <!-- Header Section -->
+<div class="wholepage">
   <div class="scoreboard-wrapper">
-  <h1 class="game-title">Mind Cards</h1>
+    <div class="title-header-container">
+       <h1 class="game-title">Mind Cards</h1>
+       <a href="/home" class="home-link">HOME</a>
+    </div>
   
   <div class="stats-capsule">
     <!-- Score Box -->
     <div class="stat-box">
       <span class="stat-label">SCORE</span>
-      <span class="stat-value neon-green">dev</span>
+      <span class="stat-value neon-green">developing</span>
     </div>
     
     <div class="vertical-divider"></div>
@@ -15,7 +17,7 @@
     <!-- Round Box -->
     <div class="stat-box">
       <span class="stat-label">ROUND</span>
-      <span class="stat-value neon-cyan">dev</span>
+      <span class="stat-value neon-cyan">developing</span>
     </div>
     
     <div class="vertical-divider"></div>
@@ -23,13 +25,12 @@
     <!-- High Score Box -->
     <div class="stat-box">
       <span class="stat-label">HIGH SCORE</span>
-      <span class="stat-value neon-cyan">dev</span>
+      <span class="stat-value neon-cyan">developing</span>
     </div>
   </div>
 </div>
-
-  <!-- Strikes Section -->
-  <div class="strikes-wrapper">
+<!--  -->
+<div class="strikes-wrapper">
   <span class="strikes-label">STRIKES</span>
   
   <div class="strikes-row">
@@ -44,107 +45,169 @@
     </div>
   </div>
 </div>
+<!-- Game Board -->
+ <div class="game-play-area">
 
-  <!-- 3x3 Card Grid Platform -->
-  <main class="grid-container">
-    <!-- Card 1: Heart (Red Neon) -->
-    <div class="card-wrapper">
-      <div class="card neon-border-red">
-        <span class="card-corner top-left red-text">K<br>♥</span>
-        <div class="card-center red-text">♥</div>
-        <span class="card-corner bottom-right red-text">K<br>♥</span>
+  <div class="side-column left-side">
+      <span class="column-label">Target Card</span>
+      <div class="display-card-box">
+        <div class="card-wrapper">
+          <div class="card-inner">
+            <div class="card-face card-front neon-border-red">
+              <span class="card-corner top-left red-text">A<br>♠</span>
+              <div class="card-center red-text">♠</div>
+              <span class="card-corner bottom-right red-text">A<br>♠</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Card 2: Diamond (Purple Neon) -->
-    <div class="card-wrapper">
-      <div class="card neon-border-purple">
-        <span class="card-corner top-left purple-text">A<br>♦</span>
-        <div class="card-center purple-text">♦</div>
-        <span class="card-corner bottom-right purple-text">A<br>♦</span>
+ <div class="grid-container">
+
+  <!-- CARD 1: King of Hearts -->
+  <div class="card-wrapper">
+    <!-- Add 'is-flipped' class here to test turning it face-down -->
+    <div class="card-inner">
+      <!-- FRONT SIDE (Value & Suit) -->
+      <div class="card-face card-front neon-border-red">
+        <span class="card-corner top-left red-text">A<br>♠</span>
+        <div class="card-center red-text">♠</div>
+        <span class="card-corner bottom-right red-text">A<br>♠</span>
+      </div>
+      <!-- BACK SIDE (Hidden State / Pattern) -->
+      <div class="card-face card-back">
+        <div class="pattern-logo">✕</div>
       </div>
     </div>
+  </div>
 
-    <!-- Card 3: Club (Cyan/Green Neon) -->
-    <div class="card-wrapper">
-      <div class="card neon-border-cyan">
-        <span class="card-corner top-left cyan-text">3<br>♣</span>
-        <div class="card-center cyan-text">♣</div>
-        <span class="card-corner bottom-right cyan-text">3<br>♣</span>
-      </div>
-    </div>
-
-    <!-- Card 4: Diamond (Red Neon) -->
-    <div class="card-wrapper">
-      <div class="card neon-border-red">
-        <span class="card-corner top-left red-text">A<br>♦</span>
-        <div class="card-center red-text">♦</div>
-        <span class="card-corner bottom-right red-text">A<br>♦</span>
-      </div>
-    </div>
-
-    <!-- Card 5: TARGET CARD (Target Frame Focus Overlay) -->
-    <div class="card-wrapper target-focus">
-      <div class="card neon-border-blue target-card">
-        <span class="card-corner top-left blue-text">A<br>♣</span>
-        <div class="card-center blue-text">♣</div>
-        <span class="card-corner bottom-right blue-text">A<br>♣</span>
-      </div>
-      <!-- Targeting crosshair brackets from your design -->
-      <div class="target-bracket tl"></div>
-      <div class="target-bracket tr"></div>
-      <div class="target-bracket bl"></div>
-      <div class="target-bracket br"></div>
-    </div>
-
-    <!-- Card 6: Spade (Green Neon) -->
-    <div class="card-wrapper">
-      <div class="card neon-border-green">
+  <!-- CARD 2: Ace of Diamonds -->
+  <div class="card-wrapper">
+    <div class="card-inner">
+      <div class="card-face card-front neon-border-green">
         <span class="card-corner top-left green-text">A<br>♠</span>
         <div class="card-center green-text">♠</div>
         <span class="card-corner bottom-right green-text">A<br>♠</span>
       </div>
+      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
     </div>
+  </div>
 
-    <!-- Card 7: Heart (Red Neon) -->
-    <div class="card-wrapper">
-      <div class="card neon-border-red">
-        <span class="card-corner top-left red-text">K<br>♥</span>
-        <div class="card-center red-text">♥</div>
-        <span class="card-corner bottom-right red-text">K<br>♥</span>
+  <!-- CARD 3: 3 of Clubs -->
+  <div class="card-wrapper">
+    <div class="card-inner">
+      <div class="card-face card-front neon-border-purple">
+        <span class="card-corner top-left purple-text">A<br>♠</span>
+        <div class="card-center purple-text">♠</div>
+        <span class="card-corner bottom-right purple-text">A<br>♠</span>
       </div>
+      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
     </div>
+  </div>
 
-    <!-- Card 8: Club (Purple Neon) -->
-    <div class="card-wrapper">
-      <div class="card neon-border-purple">
-        <span class="card-corner top-left purple-text">A<br>♣</span>
-        <div class="card-center purple-text">♣</div>
-        <span class="card-corner bottom-right purple-text">A<br>♣</span>
+  <!-- CARD 4: Ace of Diamonds -->
+  <div class="card-wrapper">
+    <div class="card-inner">
+      <div class="card-face card-front neon-border-purple">
+        <span class="card-corner top-left purple-text">A<br>♠</span>
+        <div class="card-center purple-text">♠</div>
+        <span class="card-corner bottom-right purple-text">A<br>♠</span>
       </div>
+      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
     </div>
+  </div>
 
-    <!-- Card 9: Spade (Green Neon) -->
-    <div class="card-wrapper">
-      <div class="card neon-border-green">
+  <!-- CARD 5: Target Focus Card (Ace of Clubs) -->
+  <div class="card-wrapper">
+    <div class="card-inner">
+      <div class="card-face card-front neon-border-red">
+        <span class="card-corner top-left red-text">A<br>♠</span>
+        <div class="card-center red-text">♠</div>
+        <span class="card-corner bottom-right red-text">A<br>♠</span>
+      </div>
+      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
+    </div>
+  </div>
+  
+
+  <!-- CARD 6: Ace of Spades -->
+  <div class="card-wrapper">
+    <div class="card-inner">
+      <div class="card-face card-front neon-border-green">
         <span class="card-corner top-left green-text">A<br>♠</span>
         <div class="card-center green-text">♠</div>
         <span class="card-corner bottom-right green-text">A<br>♠</span>
       </div>
+      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
     </div>
-  </main>
+  </div>
 
-  <!-- Footer Navigation Indicators -->
-  <footer class="game-footer">
-    <div class="bottom-deco-indicators">
-      <span class="deco-x faded-red">✕</span>
-      <span class="deco-x neon-cyan">✕</span>
-      <span class="deco-x dark-gray">✕</span>
+  <!-- CARD 7: King of Hearts -->
+  <div class="card-wrapper">
+    <div class="card-inner">
+      <div class="card-face card-front neon-border-green">
+        <span class="card-corner top-left green-text">A<br>♠</span>
+        <div class="card-center green-text">♠</div>
+        <span class="card-corner bottom-right green-text">A<br>♠</span>
+      </div>
+      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
     </div>
-    
-    <div class="footer-controls">
-      <span class="player-name">Player Name</span>
-      <button class="leaderboard-btn">LEADERBOARD</button>
+  </div>
+
+  <!-- CARD 8: Ace of Clubs -->
+  <div class="card-wrapper">
+    <div class="card-inner">
+      <div class="card-face card-front neon-border-purple">
+        <span class="card-corner top-left purple-text">A<br>♠</span>
+        <div class="card-center purple-text">♠</div>
+        <span class="card-corner bottom-right purple-text">A<br>♠</span>
+      </div>
+      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
     </div>
-  </footer>
+  </div>
+
+  <!-- CARD 9: Ace of Spades -->
+  <div class="card-wrapper">
+    <!-- Add 'is-flipped' class here to test turning it face-down -->
+    <div class="card-inner">
+      <!-- FRONT SIDE (Value & Suit) -->
+      <div class="card-face card-front neon-border-red">
+        <span class="card-corner top-left red-text">A<br>♠</span>
+        <div class="card-center red-text">♠</div>
+        <span class="card-corner bottom-right red-text">A<br>♠</span>
+      </div>
+      <!-- BACK SIDE (Hidden State / Pattern) -->
+      <div class="card-face card-back">
+        <div class="pattern-logo">✕</div>
+      </div>
+    </div>
+  </div>
+<div>
+    <!-- HUD Target Brackets -->
+    <div class="target-bracket tl"></div>
+    <div class="target-bracket tr"></div>
+    <div class="target-bracket bl"></div>
+    <div class="target-bracket br"></div>
+  </div>
+</div>
+
+<div class="side-column right-side">
+      <span class="column-label">Result</span>
+      <div class="result-status-box">
+        <div class="result-line correct">Correct </div>
+        <div class="result-line wrong">Wrong </div>
+        <div class="result-line waiting">—</div>
+      </div>
+    </div>
+
+</div>
+<!---------------------------------------------------footer--------------------------------------------------------------------------->
+<div class="top-nav-bar">
+  <!-- Left Side: Player Label -->
+  <span class="player-name-label">Player Name</span>
+
+  <!-- Right Side: Leaderboard Trigger -->
+  <a href="/profile" class="leaderboard-btn">BACK TO PROFILE</a>
+</div>
 </div>
