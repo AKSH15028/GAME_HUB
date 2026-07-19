@@ -5,209 +5,137 @@
        <a href="/home" class="home-link">HOME</a>
     </div>
   
-  <div class="stats-capsule">
-    <!-- Score Box -->
-    <div class="stat-box">
-      <span class="stat-label">SCORE</span>
-      <span class="stat-value neon-green">developing</span>
-    </div>
-    
-    <div class="vertical-divider"></div>
-    
-    <!-- Round Box -->
-    <div class="stat-box">
-      <span class="stat-label">ROUND</span>
-      <span class="stat-value neon-cyan">developing</span>
-    </div>
-    
-    <div class="vertical-divider"></div>
-    
-    <!-- High Score Box -->
-    <div class="stat-box">
-      <span class="stat-label">HIGH SCORE</span>
-      <span class="stat-value neon-cyan">developing</span>
-    </div>
-  </div>
-</div>
-<!--  -->
-<div class="strikes-wrapper">
-  <span class="strikes-label">STRIKES</span>
-  
-  <div class="strikes-row">
-    <!-- Strike 1: Active (Cyan Neon Glow) -->
-    <div class="strike-circle active">
-      <span class="x-icon">✕</span>
-    </div>
-
-    <!-- Strike 2: Empty/Available (Dark Dimmed Slot) -->
-    <div class="strike-circle active">
-      <span class="x-icon">✕</span>
+    <div class="stats-capsule">
+      <!-- Score Box -->
+      <div class="stat-box">
+        <span class="stat-label">SCORE</span>
+        <span class="stat-value neon-green">{{ score }}</span>
+      </div>
+      
+      <div class="vertical-divider"></div>
+      
+      <!-- Round Box -->
+      <div class="stat-box">
+        <span class="stat-label">ROUND</span>
+        <span class="stat-value neon-cyan">{{ round }}</span>
+      </div>
+      
+      <div class="vertical-divider"></div>
+      
+      <!-- High Score / Phase Timer Helper Box -->
+      <div class="stat-box">
+        <span class="stat-label">
+          <span *ngIf="gameState === 'REVEAL'">MEMORIZE TARGET</span>
+          <span *ngIf="gameState === 'GRID'">TRACK TARGET</span>
+          <span *ngIf="gameState === 'GUESS'">WHERE IS IT?</span>
+          <span *ngIf="gameState === 'RESOLUTION'">EVALUATING...</span>
+          <span *ngIf="gameState === 'GAMEOVER'">GAME OVER</span>
+        </span>
+        <span class="stat-value neon-cyan">{{ timerValue }}s</span>
+      </div>
     </div>
   </div>
-</div>
-<!-- Game Board -->
- <div class="game-play-area">
 
-  <div class="side-column left-side">
+  <!-- Strikes Wrapper Indicator Panel -->
+  <div class="strikes-wrapper">
+    <span class="strikes-label">STRIKES</span>
+    <div class="strikes-row">
+      <!-- Strike Circle 1 -->
+      <div class="strike-circle" [ngClass]="{ 'active': strikes < 1, 'failed': strikes >= 1 }">
+        <span class="x-icon">✕</span>
+      </div>
+
+      <!-- Strike Circle 2 -->
+      <div class="strike-circle" [ngClass]="{ 'active': strikes < 2, 'failed': strikes >= 2 }">
+        <span class="x-icon">✕</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Board Core Matrix Loop View Space -->
+  <div class="game-play-area" *ngIf="gameState !== 'GAMEOVER'; else gameOverScreen">
+
+    <!-- Left Column: The Target Preview Identity Holder -->
+    <div class="side-column left-side" [style.opacity]="gameState === 'GUESS' ? '0.1' : '1'">
       <span class="column-label">Target Card</span>
-      <div class="display-card-box">
+      <div class="display-card-box" *ngIf="targetCard">
         <div class="card-wrapper">
           <div class="card-inner">
-            <div class="card-face card-front neon-border-red">
-              <span class="card-corner top-left red-text">A<br>♠</span>
-              <div class="card-center red-text">♠</div>
-              <span class="card-corner bottom-right red-text">A<br>♠</span>
+            <div class="card-face card-front" [ngClass]="targetCard.themeColor">
+              <span class="card-corner top-left" [ngClass]="targetCard.textColor">
+                {{ targetCard.rank }}<br>{{ targetCard.suit }}
+              </span>
+              <div class="card-center" [ngClass]="targetCard.textColor">{{ targetCard.suit }}</div>
+              <span class="card-corner bottom-right" [ngClass]="targetCard.textColor">
+                {{ targetCard.rank }}<br>{{ targetCard.suit }}
+              </span>
             </div>
           </div>
         </div>
       </div>
     </div>
 
- <div class="grid-container">
-
-  <!-- CARD 1: King of Hearts -->
-  <div class="card-wrapper">
-    <!-- Add 'is-flipped' class here to test turning it face-down -->
-    <div class="card-inner">
-      <!-- FRONT SIDE (Value & Suit) -->
-      <div class="card-face card-front neon-border-red">
-        <span class="card-corner top-left red-text">A<br>♠</span>
-        <div class="card-center red-text">♠</div>
-        <span class="card-corner bottom-right red-text">A<br>♠</span>
+    <!-- Center Section Grid Core -->
+    <div class="grid-container" [style.opacity]="gameState === 'REVEAL' ? '0.1' : '1'">
+      <div *ngFor="let card of gridCards" class="card-wrapper" (click)="onCardClick(card)">
+        <div class="card-inner" [class.is-flipped]="card.isFlipped">
+          
+          <!-- FRONT SIDE (Dynamic Deck Contexts Painting) -->
+          <div class="card-face card-front" [ngClass]="card.themeColor">
+            <span class="card-corner top-left" [ngClass]="card.textColor">
+              {{ card.rank }}<br>{{ card.suit }}
+            </span>
+            <div class="card-center" [ngClass]="card.textColor">{{ card.suit }}</div>
+            <span class="card-corner bottom-right" [ngClass]="card.textColor">
+              {{ card.rank }}<br>{{ card.suit }}
+            </span>
+          </div>
+          
+          <!-- BACK SIDE (Hidden Guess Context Platform Masks) -->
+          <div class="card-face card-back">
+            <div class="pattern-logo">✕</div>
+          </div>
+          
+        </div>
       </div>
-      <!-- BACK SIDE (Hidden State / Pattern) -->
-      <div class="card-face card-back">
-        <div class="pattern-logo">✕</div>
+
+      <!-- HUD Target Brackets inside grid-container -->
+      <div>
+        <div class="target-bracket tl"></div>
+        <div class="target-bracket tr"></div>
+        <div class="target-bracket bl"></div>
+        <div class="target-bracket br"></div>
       </div>
     </div>
-  </div>
 
-  <!-- CARD 2: Ace of Diamonds -->
-  <div class="card-wrapper">
-    <div class="card-inner">
-      <div class="card-face card-front neon-border-green">
-        <span class="card-corner top-left green-text">A<br>♠</span>
-        <div class="card-center green-text">♠</div>
-        <span class="card-corner bottom-right green-text">A<br>♠</span>
-      </div>
-      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
-    </div>
-  </div>
-
-  <!-- CARD 3: 3 of Clubs -->
-  <div class="card-wrapper">
-    <div class="card-inner">
-      <div class="card-face card-front neon-border-purple">
-        <span class="card-corner top-left purple-text">A<br>♠</span>
-        <div class="card-center purple-text">♠</div>
-        <span class="card-corner bottom-right purple-text">A<br>♠</span>
-      </div>
-      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
-    </div>
-  </div>
-
-  <!-- CARD 4: Ace of Diamonds -->
-  <div class="card-wrapper">
-    <div class="card-inner">
-      <div class="card-face card-front neon-border-purple">
-        <span class="card-corner top-left purple-text">A<br>♠</span>
-        <div class="card-center purple-text">♠</div>
-        <span class="card-corner bottom-right purple-text">A<br>♠</span>
-      </div>
-      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
-    </div>
-  </div>
-
-  <!-- CARD 5: Target Focus Card (Ace of Clubs) -->
-  <div class="card-wrapper">
-    <div class="card-inner">
-      <div class="card-face card-front neon-border-red">
-        <span class="card-corner top-left red-text">A<br>♠</span>
-        <div class="card-center red-text">♠</div>
-        <span class="card-corner bottom-right red-text">A<br>♠</span>
-      </div>
-      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
-    </div>
-  </div>
-  
-
-  <!-- CARD 6: Ace of Spades -->
-  <div class="card-wrapper">
-    <div class="card-inner">
-      <div class="card-face card-front neon-border-green">
-        <span class="card-corner top-left green-text">A<br>♠</span>
-        <div class="card-center green-text">♠</div>
-        <span class="card-corner bottom-right green-text">A<br>♠</span>
-      </div>
-      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
-    </div>
-  </div>
-
-  <!-- CARD 7: King of Hearts -->
-  <div class="card-wrapper">
-    <div class="card-inner">
-      <div class="card-face card-front neon-border-green">
-        <span class="card-corner top-left green-text">A<br>♠</span>
-        <div class="card-center green-text">♠</div>
-        <span class="card-corner bottom-right green-text">A<br>♠</span>
-      </div>
-      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
-    </div>
-  </div>
-
-  <!-- CARD 8: Ace of Clubs -->
-  <div class="card-wrapper">
-    <div class="card-inner">
-      <div class="card-face card-front neon-border-purple">
-        <span class="card-corner top-left purple-text">A<br>♠</span>
-        <div class="card-center purple-text">♠</div>
-        <span class="card-corner bottom-right purple-text">A<br>♠</span>
-      </div>
-      <div class="card-face card-back"><div class="pattern-logo">✕</div></div>
-    </div>
-  </div>
-
-  <!-- CARD 9: Ace of Spades -->
-  <div class="card-wrapper">
-    <!-- Add 'is-flipped' class here to test turning it face-down -->
-    <div class="card-inner">
-      <!-- FRONT SIDE (Value & Suit) -->
-      <div class="card-face card-front neon-border-red">
-        <span class="card-corner top-left red-text">A<br>♠</span>
-        <div class="card-center red-text">♠</div>
-        <span class="card-corner bottom-right red-text">A<br>♠</span>
-      </div>
-      <!-- BACK SIDE (Hidden State / Pattern) -->
-      <div class="card-face card-back">
-        <div class="pattern-logo">✕</div>
-      </div>
-    </div>
-  </div>
-<div>
-    <!-- HUD Target Brackets -->
-    <div class="target-bracket tl"></div>
-    <div class="target-bracket tr"></div>
-    <div class="target-bracket bl"></div>
-    <div class="target-bracket br"></div>
-  </div>
-</div>
-
-<div class="side-column right-side">
+    <!-- Right Side Column Panel: Verdict Outputs -->
+    <div class="side-column right-side">
       <span class="column-label">Result</span>
       <div class="result-status-box">
-        <div class="result-line correct">Correct </div>
-        <div class="result-line wrong">Wrong </div>
-        <div class="result-line waiting">—</div>
+        <div class="result-line" [ngClass]="resultClass">{{ resultText }}</div>
       </div>
     </div>
 
-</div>
-<!---------------------------------------------------footer--------------------------------------------------------------------------->
-<div class="top-nav-bar">
-  <!-- Left Side: Player Label -->
-  <span class="player-name-label">Player Name</span>
+  </div>
 
-  <!-- Right Side: Leaderboard Trigger -->
-  <a href="/profile" class="leaderboard-btn">BACK TO PROFILE</a>
-</div>
+  <!-- Game Over Screen Template Layout Component Override -->
+  <ng-template #gameOverScreen>
+    <div class="result-status-box" style="max-width: 400px; margin: 40px auto; padding: 40px 20px;">
+      <h2 class="result-line wrong" style="font-size: 2rem;">CRITICAL BREAKDOWN</h2>
+      <p style="color: #626b7c; margin: 15px 0;">You have sustained two strikes. Memory loop terminated.</p>
+      <div class="stat-box" style="margin-bottom: 25px;">
+        <span class="stat-label">FINAL SCORE</span>
+        <span class="stat-value neon-green">{{ score }}</span>
+      </div>
+      <button class="leaderboard-btn" style="font-size: 1rem; padding: 10px 24px;" (click)="startNewGame()">
+        REBOOT SYSTEM
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- Navigation Bar Footer Segment Wrapper -->
+  <div class="top-nav-bar">
+    <span class="player-name-label">Operator: {{ username }}</span>
+    <a href="/profile" class="leaderboard-btn">BACK TO PROFILE</a>
+  </div>
 </div>

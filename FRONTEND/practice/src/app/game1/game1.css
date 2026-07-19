@@ -371,6 +371,44 @@
 .tr { top: -6px; right: -6px; border-left: none; border-bottom: none; }
 .bl { bottom: -6px; left: -6px; border-right: none; border-top: none; }
 .br { bottom: -6px; right: -6px; border-left: none; border-top: none; }
+/* ==========================================
+   CARD HOVER EFFECTS
+   ========================================== */
+
+/* 1. Base transition setup on your card container */
+.card-wrapper {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* 2. Lift the card slightly when hovered */
+.card-wrapper:hover {
+  transform: translateY(-6px) scale(1.03);
+}
+
+/* 3. Intensify the specific neon glow based on the card's border color */
+
+/* Red Cards Hover */
+.card-wrapper:hover .neon-border-red {
+  border-color: #ff3366;
+  box-shadow: 0 0 20px rgba(255, 51, 102, 0.6), 
+              inset 0 0 10px rgba(255, 51, 102, 0.3);
+}
+
+/* Green/Cyan Cards Hover */
+.card-wrapper:hover .neon-border-green,
+.card-wrapper:hover .neon-border-cyan {
+  border-color: #00ffaa;
+  box-shadow: 0 0 20px rgba(0, 255, 170, 0.6), 
+              inset 0 0 10px rgba(0, 255, 170, 0.3);
+}
+
+/* Purple Cards Hover */
+.card-wrapper:hover .neon-border-purple {
+  border-color: #b026ff;
+  box-shadow: 0 0 20px rgba(176, 38, 255, 0.6), 
+              inset 0 0 10px rgba(176, 38, 255, 0.3);
+}
 /*-------------------------fotter-------------------------------------------------*/
 /* ==========================================
    bottom NAVIGATION BAR BAR

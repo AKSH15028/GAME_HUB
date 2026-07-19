@@ -1,26 +1,45 @@
 using Microsoft.EntityFrameworkCore;
-using finalgame.Data; // Ensure this matches your namespace for the DbContext
+using finalgame.Data;
+using finalgame.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));// 1. Add Services to the container.
-builder.Services.AddControllersWithViews();
-// 2. Add SQLite Database Context
+// ==========================================
+// 1. REGISTER SERVICES (builder.Services)
+// ==========================================
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Configure SQLite database connection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=mydata.db"));
 
-// 3. Add Swagger/OpenAPI
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Enable Memory Caching for game states
+builder.Services.AddMemoryCache();
+
+// Register Phase 2 game services
+builder.Services.AddScoped<IDeckService, DeckService>();
+
+// Configure CORS Policy for the Angular frontend
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngular",
-        policy => policy.WithOrigins("http://localhost:4200")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
+
+// ==========================================
+// 2. BUILD THE APP (ONLY ONCE!)
+// ==========================================
 var app = builder.Build();
-// 4. Configure the HTTP request pipeline.
+
+// ==========================================
+// 3. CONFIGURE MIDDLEWARE PIPELINE (app.Use)
+// ==========================================
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -31,14 +50,18 @@ else
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-// Add this after builder.Build()
-app.UseCors("AllowAngular");
-app.UseCors("AllowAngular");
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Apply the CORS policy before routing and authorization
+app.UseCors("AllowAngular");
+
 app.UseRouting();
 app.UseAuthorization();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.Run();
