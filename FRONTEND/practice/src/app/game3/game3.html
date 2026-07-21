@@ -1,1 +1,26 @@
-<p>game3 works!</p>
+<div class="game-container">
+  <div class="header-controls">
+    <!-- Displays Move Count score mapping exactly -->
+    <div class="score-box">
+      <span class="label">MOVES</span><br>
+      <span class="value">{{ session?.currentScore || 0 }}</span>
+    </div>
+
+    <div class="action-buttons">
+      <!-- Rule 4: Undo Action Handler -->
+      <button class="icon-btn" (click)="triggerUndo()" [disabled]="loading" title="Undo Move">
+        <span class="undo-icon">&#x21BA;</span> 
+      </button>
+
+      <!-- Rule 3: New Game Reset Handler -->
+      <button class="reset-btn" (click)="triggerNewGame()" [disabled]="loading">New Game</button>
+    </div>
+  </div>
+
+  <!-- The 4x4 Grid Render Matrix Layout Block -->
+  <div class="grid-board" [class.disabled]="loading">
+    <div *ngFor="let tile of session?.grid" class="grid-cell tile-{{ tile }}">
+      {{ tile > 0 ? tile : '' }}
+    </div>
+  </div>
+</div>

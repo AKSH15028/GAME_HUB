@@ -1,27 +1,32 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Custom2048.API.Models;
+using System.Text.Json;
 using finalgame.Models;
 
-namespace finalgame.Data;
-
-
-public class AppDbContext : DbContext
+namespace finalgame.Data
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public class AppDbContext : DbContext
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-    public DbSet<Item> Items { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<UserGameProgress> UserGameProgresses { get; set; }
-    public DbSet<Gamescores> GameScores { get; set; }
+        // Existing Game Entities
+        public DbSet<Item> Items { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserGameProgress> UserGameProgresses { get; set; }
+        public DbSet<GameScores> GameScores { get; set; }
+        public DbSet<Leaderboard> Leaderboard { get; set; }
+        public DbSet<Player> Players { get; set; }
 
-    public DbSet<Leaderboard> Leaderboard { get; set; }
-    public DbSet<Player> Players { get; set; }
+        // New 2048 Game (Game 3) Entities
+        public DbSet<Game3Session> Game3Sessions { get; set; }
+        public DbSet<Game3MoveHistory> Game3MoveHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Set up our explicit database relationships & tables
+            // --- Existing Database Relationships & Tables ---
             modelBuilder.Entity<Player>()
                 .ToTable("Players");
 
@@ -34,6 +39,23 @@ public class AppDbContext : DbContext
                 .WithMany(p => p.LeaderboardEntries)
                 .HasForeignKey(l => l.PlayerID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+            // --- New 2048 Game (Game 3) Configurations ---
+            // Handles flattening the 4x4 array matrix into a JSON string for SQLite storage
+            modelBuilder.Entity<Game3Session>()
+                .Property(g => g.Grid)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                    v => JsonSerializer.Deserialize<int[]>(v, (JsonSerializerOptions)null) ?? new int[16]
+                );
+
+            modelBuilder.Entity<Game3MoveHistory>()
+                .Property(g => g.GridSnapshot)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                    v => JsonSerializer.Deserialize<int[]>(v, (JsonSerializerOptions)null) ?? new int[16]
+                );
         }
-    
+    }
 }
