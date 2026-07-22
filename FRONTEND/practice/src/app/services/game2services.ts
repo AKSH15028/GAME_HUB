@@ -12,7 +12,7 @@ export interface GameSession {
   providedIn: 'root'
 })
 export class GameService {
-  private apiUrl = 'http://localhost:5000/api/game'; // Adjust port to match your local .NET configuration
+  private apiUrl = 'http://localhost:5238/api/game3';
 
   constructor(private http: HttpClient) {}
 

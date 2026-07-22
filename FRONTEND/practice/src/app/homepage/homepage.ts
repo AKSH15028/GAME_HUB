@@ -21,6 +21,6 @@ export class Homepage {
 
   isLoggedIn(): boolean {
     if (!this.isBrowser) return false;
-    return localStorage.getItem('userToken') !== null;
+    return localStorage.getItem('user') !== null;
   }
 }

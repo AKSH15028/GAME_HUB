@@ -10,9 +10,7 @@ import { Setting } from './setting/setting';
 import { ProfileComponent } from './profile/profile';
 import { Game1 } from './game1/game1';
 import { Game2 } from './game2/game2';
-import {Game3} from './game3/game3';
-
-
+import { Game3 } from './game3/game3';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -22,9 +20,9 @@ export const routes: Routes = [
   { path: 'game', component: Game , canActivate: [accessGuard] }, // use access guard, canActivate: [accessGuard]
   { path: 'settings', component: Setting },
   { path: 'profile', component: ProfileComponent },
-  {path: 'game1', component: Game1}, // use access guard, canActivate: [accessGuard]
-  {path: 'game2', component: Game2}, // use access guard, canActivate: [accessGuard]
-  {path: 'game3', component: Game3} // use access guard, canActivate: [accessGuard]
+  { path: 'game1', component: Game1 }, // use access guard, canActivate: [accessGuard]
+  { path: 'game2', component: Game2 },
+  { path: 'game3', component: Game3 } // use access guard, canActivate: [accessGuard]
 ];
 export const appConfig: ApplicationConfig = {
   providers: [

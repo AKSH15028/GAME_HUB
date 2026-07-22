@@ -4,7 +4,7 @@ import type { CanActivateFn } from '@angular/router';
 
 export const accessGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const isLoggedIn = localStorage.getItem('user') !== null;
+  const isLoggedIn = typeof localStorage !== 'undefined' && localStorage.getItem('user') !== null;
 
   if (isLoggedIn) {
     return true;

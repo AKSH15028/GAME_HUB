@@ -1,0 +1,165 @@
+<div class="quiz-page-container">
+  <!-- Header Bar -->
+  <header class="quiz-header">
+    <div class="header-title">
+      <span class="quiz-icon">🧠</span>
+      <h1>Cyber Quiz Arena</h1>
+    </div>
+    <div class="header-actions">
+      <span class="user-badge">👤 {{ username }}</span>
+      <a href="/home" class="nav-btn">HOME</a>
+      <a href="/game" class="nav-btn highlight">GAMES HUB</a>
+    </div>
+  </header>
+
+  <!-- State 1: Category Selection Screen -->
+  <div class="view-card category-screen" *ngIf="gameState === 'CATEGORY'">
+    <div class="hero-header">
+      <h2>CHOOSE YOUR QUIZ CHALLENGE</h2>
+      <p>Test your knowledge, build streaks, and use strategic lifelines!</p>
+    </div>
+
+    <div class="category-grid">
+      <div 
+        *ngFor="let cat of categories" 
+        class="category-card"
+        (click)="selectCategoryAndStart(cat)"
+      >
+        <div class="category-icon">
+          <span *ngIf="cat === 'All'">⚡</span>
+          <span *ngIf="cat === 'Tech & Gaming'">🕹️</span>
+          <span *ngIf="cat === 'Science & Nature'">🧪</span>
+          <span *ngIf="cat === 'General Knowledge'">💡</span>
+          <span *ngIf="cat === 'Pop Culture & History'">📜</span>
+        </div>
+        <h3 class="category-name">{{ cat }}</h3>
+        <span class="play-tag">START QUIZ &rarr;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- State 2 & 3: Active Question / Feedback Screen -->
+  <div class="view-card question-screen" *ngIf="gameState === 'QUESTION' || gameState === 'FEEDBACK'">
+    <!-- Top HUD -->
+    <div class="quiz-hud">
+      <div class="hud-item">
+        <span class="hud-label">QUESTION</span>
+        <span class="hud-val cyan">{{ currentIndex + 1 }} / {{ questions.length }}</span>
+      </div>
+
+      <div class="hud-item timer-item" [class.urgent]="timerValue <= 4">
+        <span class="hud-label">TIME</span>
+        <span class="hud-val yellow">{{ timerValue }}s</span>
+      </div>
+
+      <div class="hud-item">
+        <span class="hud-label">SCORE</span>
+        <span class="hud-val green">{{ score }}</span>
+      </div>
+
+      <div class="hud-item">
+        <span class="hud-label">STREAK</span>
+        <span class="hud-val orange">🔥 {{ streak }}</span>
+      </div>
+    </div>
+
+    <!-- Timer Progress Bar -->
+    <div class="timer-bar-container">
+      <div class="timer-bar-fill" [style.width.%]="(timerValue / 15) * 100"></div>
+    </div>
+
+    <!-- Lifelines Panel -->
+    <div class="lifelines-row">
+      <button 
+        class="lifeline-btn" 
+        [disabled]="lifelines.fiftyFiftyUsed || gameState !== 'QUESTION'"
+        (click)="useFiftyFifty()"
+      >
+        <span>50:50</span>
+      </button>
+
+      <button 
+        class="lifeline-btn" 
+        [disabled]="lifelines.timeBoostUsed || gameState !== 'QUESTION'"
+        (click)="useTimeBoost()"
+      >
+        <span>⏱️ +10s</span>
+      </button>
+
+      <button 
+        class="lifeline-btn" 
+        [disabled]="lifelines.skipUsed || gameState !== 'QUESTION'"
+        (click)="useSkip()"
+      >
+        <span>⏭️ Skip</span>
+      </button>
+    </div>
+
+    <!-- Question Box -->
+    <div class="question-card-box" *ngIf="currentQuestion">
+      <span class="question-category-tag">{{ currentQuestion.category }} • {{ currentQuestion.difficulty }}</span>
+      <h2 class="question-text">{{ currentQuestion.questionText }}</h2>
+
+      <!-- 4 Multiple Choice Options -->
+      <div class="options-grid">
+        <button
+          *ngFor="let option of currentQuestion.options; let i = index"
+          class="option-btn"
+          [disabled]="gameState !== 'QUESTION' || hiddenOptionIndices.includes(i)"
+          [class.hidden]="hiddenOptionIndices.includes(i)"
+          [class.selected]="selectedOptionIndex === i"
+          [class.correct]="gameState === 'FEEDBACK' && lastResult?.correctOptionIndex === i"
+          [class.wrong]="gameState === 'FEEDBACK' && selectedOptionIndex === i && !lastResult?.isCorrect"
+          (click)="submitOption(i)"
+        >
+          <span class="option-prefix">{{ ['A', 'B', 'C', 'D'][i] }}</span>
+          <span class="option-text">{{ option }}</span>
+        </button>
+      </div>
+
+      <!-- Feedback Explanation Box -->
+      <div class="feedback-banner" *ngIf="gameState === 'FEEDBACK' && lastResult" [class.is-correct]="lastResult.isCorrect">
+        <div class="verdict">
+          <span *ngIf="lastResult.isCorrect">🎉 CORRECT! (+{{ lastResult.pointsEarned }} pts)</span>
+          <span *ngIf="!lastResult.isCorrect">❌ INCORRECT</span>
+        </div>
+        <p class="explanation-text">{{ lastResult.explanation }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- State 4: Results Summary Screen -->
+  <div class="view-card results-screen" *ngIf="gameState === 'RESULTS'">
+    <div class="results-header">
+      <h2>QUIZ COMPLETE!</h2>
+      <p class="results-subtitle">Great effort, Operator!</p>
+    </div>
+
+    <div class="summary-stats-grid">
+      <div class="summary-card">
+        <span class="sum-label">TOTAL SCORE</span>
+        <span class="sum-val green">{{ score }}</span>
+      </div>
+
+      <div class="summary-card">
+        <span class="sum-label">ACCURACY</span>
+        <span class="sum-val cyan">{{ getAccuracy() }}%</span>
+      </div>
+
+      <div class="summary-card">
+        <span class="sum-label">BEST STREAK</span>
+        <span class="sum-val orange">🔥 {{ maxStreak }}</span>
+      </div>
+
+      <div class="summary-card">
+        <span class="sum-label">CORRECT ANSWERS</span>
+        <span class="sum-val yellow">{{ correctAnswersCount }} / {{ questions.length }}</span>
+      </div>
+    </div>
+
+    <div class="results-actions">
+      <button class="action-btn primary" (click)="gameState = 'CATEGORY'">PLAY AGAIN</button>
+      <a href="/game" class="action-btn secondary">RETURN TO GAMES HUB</a>
+    </div>
+  </div>
+</div>

@@ -1,26 +1,95 @@
-<div class="game-container">
-  <div class="header-controls">
-    <!-- Displays Move Count score mapping exactly -->
-    <div class="score-box">
-      <span class="label">MOVES</span><br>
-      <span class="value">{{ session?.currentScore || 0 }}</span>
+<div class="game-page-wrapper">
+  <div class="game-2048-container">
+    
+    <!-- Top Navigation Header -->
+    <div class="top-nav-bar">
+      <div class="nav-left">
+        <a href="/home" class="home-btn">🎮 HOME</a>
+        <a href="/game" class="hub-btn">GAMES HUB</a>
+      </div>
+      <h1 class="logo-title">2048</h1>
     </div>
 
-    <div class="action-buttons">
-      <!-- Rule 4: Undo Action Handler -->
-      <button class="icon-btn" (click)="triggerUndo()" [disabled]="loading" title="Undo Move">
-        <span class="undo-icon">&#x21BA;</span> 
-      </button>
+    <!-- Sub-header Scores & Controls -->
+    <div class="header-controls">
+      <div class="scores-row">
+        <div class="score-box">
+          <span class="score-label">SCORE</span>
+          <span class="score-val">{{ session?.currentScore || 0 }}</span>
+        </div>
 
-      <!-- Rule 3: New Game Reset Handler -->
-      <button class="reset-btn" (click)="triggerNewGame()" [disabled]="loading">New Game</button>
-    </div>
-  </div>
+        <div class="score-box best-box">
+          <span class="score-label">BEST</span>
+          <span class="score-val">{{ highScore }}</span>
+        </div>
 
-  <!-- The 4x4 Grid Render Matrix Layout Block -->
-  <div class="grid-board" [class.disabled]="loading">
-    <div *ngFor="let tile of session?.grid" class="grid-cell tile-{{ tile }}">
-      {{ tile > 0 ? tile : '' }}
+        <div class="score-box moves-box">
+          <span class="score-label">MOVES</span>
+          <span class="score-val">{{ movesCount }}</span>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="icon-btn undo-btn" (click)="triggerUndo()" [disabled]="loading || isGameOver" title="Undo Move">
+          <span>&#x21BA; Undo</span>
+        </button>
+
+        <button class="reset-btn" (click)="triggerNewGame()" [disabled]="loading">
+          <span>New Game</span>
+        </button>
+      </div>
     </div>
+
+    <!-- Instructions banner -->
+    <p class="game-instruction">
+      Join the numbers and get to the <strong>2048 tile!</strong> Use arrow keys, WASD, or on-screen buttons below.
+    </p>
+
+    <!-- 4x4 Grid Board Matrix -->
+    <div class="board-wrapper">
+      <div class="grid-board" [class.disabled]="loading">
+        <div 
+          *ngFor="let tile of session?.grid" 
+          class="grid-cell"
+          [ngClass]="'tile-' + tile"
+        >
+          <span class="tile-number" *ngIf="tile > 0">{{ tile }}</span>
+        </div>
+      </div>
+
+      <!-- Game Over Overlay Modal -->
+      <div class="modal-overlay" *ngIf="isGameOver">
+        <div class="modal-content">
+          <h2>GAME OVER!</h2>
+          <p>No more available moves. Final Score: <strong>{{ session?.currentScore }}</strong></p>
+          <button class="modal-btn" (click)="triggerNewGame()">TRY AGAIN</button>
+        </div>
+      </div>
+
+      <!-- Victory Overlay Modal -->
+      <div class="modal-overlay victory" *ngIf="isVictory">
+        <div class="modal-content">
+          <h2>🎉 YOU WIN!</h2>
+          <p>You reached the 2048 tile! Final Score: <strong>{{ session?.currentScore }}</strong></p>
+          <div class="modal-actions">
+            <button class="modal-btn" (click)="dismissVictoryModal()">KEEP PLAYING</button>
+            <button class="modal-btn secondary" (click)="triggerNewGame()">RESTART</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- On-Screen Arrow Controls for Mobile & Mouse users -->
+    <div class="control-pad">
+      <div class="pad-row">
+        <button class="pad-btn up" (click)="processMove('UP')" [disabled]="loading || isGameOver">▲</button>
+      </div>
+      <div class="pad-row middle">
+        <button class="pad-btn left" (click)="processMove('LEFT')" [disabled]="loading || isGameOver">◄</button>
+        <button class="pad-btn down" (click)="processMove('DOWN')" [disabled]="loading || isGameOver">▼</button>
+        <button class="pad-btn right" (click)="processMove('RIGHT')" [disabled]="loading || isGameOver">►</button>
+      </div>
+    </div>
+
   </div>
 </div>

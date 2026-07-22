@@ -1,26 +1,19 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace GameHub.Models
+namespace finalgame.Models
 {
-    public class GameMoveHistory
+    public class Game3MoveHistory
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        // Identifies the active session (allows for multi-tab or multi-user stability later)
-        [Required]
-        public string SessionId { get; set; } = "default-session";
+        public Guid GameSessionId { get; set; }
 
-        // Stores the 4x4 matrix as a JSON string (e.g., "[[2,0,0,0],[0,4,0,0],...]")
-        [Required]
-        public string GridStateJson { get; set; } = string.Empty;
+        public int[] GridSnapshot { get; set; } = new int[16];
 
-        // Tracks the move number (+1 per valid turn)
-        [Required]
-        public int MoveCount { get; set; }
+        public int ScoreSnapshot { get; set; }
 
-        [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime LoggedAt { get; set; } = DateTime.UtcNow;
     }
 }

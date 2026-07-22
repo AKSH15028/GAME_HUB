@@ -1,79 +1,145 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { GameService, GameSession } from '../services/game2services';
 
 @Component({
   selector: 'app-game3',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './game3.html',
   styleUrls: ['./game3.css']
 })
 export class Game3 implements OnInit {
-  session!: GameSession;
-  loading: boolean = true;
+  session: GameSession = {
+    id: '11111111-1111-1111-1111-111111111111',
+    grid: new Array(16).fill(0),
+    currentScore: 0
+  };
+
+  highScore: number = 0;
+  movesCount: number = 0;
+  loading: boolean = false;
+  isGameOver: boolean = false;
+  isVictory: boolean = false;
+  victoryDismissed: boolean = false;
 
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.gameService.getSession().subscribe(data => {
-      this.session = data;
-      // If fetched board is completely blank, spawn initial tiles
-      if (this.session.grid.every(val => val === 0)) {
-        this.initializeNewGrid();
-      } else {
+    const savedHighScore = typeof localStorage !== 'undefined' ? localStorage.getItem('2048_highScore') : null;
+    if (savedHighScore) {
+      this.highScore = parseInt(savedHighScore, 10) || 0;
+    }
+
+    this.fetchSession();
+  }
+
+  fetchSession(): void {
+    this.loading = true;
+    this.gameService.getSession().subscribe({
+      next: (data) => {
+        this.session = data;
         this.loading = false;
+
+        // If fetched board is completely blank, initialize new grid with 2 random tiles
+        if (!this.session.grid || this.session.grid.every(val => val === 0)) {
+          this.initializeNewGrid();
+        } else {
+          this.checkGameStatus();
+        }
+      },
+      error: () => {
+        // Fallback local session if backend fails
+        this.loading = false;
+        this.initializeNewGrid();
       }
     });
   }
 
-  // Handle slide inputs via keyboard arrow keys
+  // Handle slide inputs via keyboard arrow keys & WASD
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (this.loading) return;
+    if (this.loading || this.isGameOver) return;
 
-    let direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
+    let direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null = null;
     switch (event.key) {
-      case 'ArrowUp': direction = 'UP'; break;
-      case 'ArrowDown': direction = 'DOWN'; break;
-      case 'ArrowLeft': direction = 'LEFT'; break;
-      case 'ArrowRight': direction = 'RIGHT'; break;
-      default: return; // Ignore any other key inputs
+      case 'ArrowUp':
+      case 'w':
+      case 'W':
+        direction = 'UP';
+        break;
+      case 'ArrowDown':
+      case 's':
+      case 'S':
+        direction = 'DOWN';
+        break;
+      case 'ArrowLeft':
+      case 'a':
+      case 'A':
+        direction = 'LEFT';
+        break;
+      case 'ArrowRight':
+      case 'd':
+      case 'D':
+        direction = 'RIGHT';
+        break;
     }
 
-    event.preventDefault(); 
-    this.processMove(direction);
+    if (direction) {
+      event.preventDefault();
+      this.processMove(direction);
+    }
   }
 
   processMove(direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') {
-    const currentGrid = [...this.session.grid];
-    const transformedGrid = this.executeSlide(currentGrid, direction);
+    if (this.loading || this.isGameOver) return;
 
-    // Verify if changes occurred (if no movements or merges happened, it's an invalid move)
-    const isMoveValid = JSON.stringify(currentGrid) !== JSON.stringify(transformedGrid);
+    const currentGrid = [...this.session.grid];
+    const { newGrid, pointsGained } = this.executeSlide(currentGrid, direction);
+
+    // Verify if changes occurred
+    const isMoveValid = JSON.stringify(currentGrid) !== JSON.stringify(newGrid);
 
     if (isMoveValid) {
-      // Rule 2: Increment score by exactly 1 per valid sliding move
-      this.session.grid = transformedGrid;
-      this.session.currentScore += 1;
+      this.session.grid = newGrid;
+      this.session.currentScore += pointsGained;
+      this.movesCount += 1;
 
-      // Rule 1: Spawn a random tile (2 or 4) into an empty cell
+      if (this.session.currentScore > this.highScore) {
+        this.highScore = this.session.currentScore;
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('2048_highScore', this.highScore.toString());
+        }
+      }
+
+      // Spawn a random tile (2 or 4) into an empty cell
       this.spawnRandomTile();
 
-      // Transmit updated layouts to API backend
+      this.checkGameStatus();
+
+      // Transmit updated layout to API backend
       this.loading = true;
-      this.gameService.saveMove(this.session).subscribe(updatedSession => {
-        this.session = updatedSession;
-        this.loading = false;
+      this.gameService.saveMove(this.session).subscribe({
+        next: (updatedSession) => {
+          this.session = updatedSession;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+        }
       });
     }
   }
 
-  // Pure function mechanics implementing 2048 line manipulation
-  executeSlide(grid: number[], direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT'): number[] {
+  // Pure function mechanics implementing 2048 line manipulation & score points
+  executeSlide(grid: number[], direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT'): { newGrid: number[], pointsGained: number } {
     let result = [...grid];
+    let pointsGained = 0;
     
     for (let i = 0; i < 4; i++) {
       let line: number[] = [];
       
-      // 1. Extract columns or rows as flat arrays based on vectors
+      // 1. Extract columns or rows as flat arrays
       for (let j = 0; j < 4; j++) {
         let index = 0;
         if (direction === 'LEFT')  index = i * 4 + j;
@@ -83,11 +149,12 @@ export class Game3 implements OnInit {
         line.push(result[index]);
       }
 
-      // 2. Compress zero elements out, merge matches, compress zeros again
+      // 2. Compress zero elements out, merge matching adjacent pairs
       line = line.filter(val => val !== 0);
       for (let j = 0; j < line.length - 1; j++) {
         if (line[j] === line[j + 1]) {
           line[j] *= 2;
+          pointsGained += line[j]; // Score increases by merged tile value!
           line[j + 1] = 0;
         }
       }
@@ -96,7 +163,7 @@ export class Game3 implements OnInit {
         line.push(0);
       }
 
-      // 3. Map modified flat structure items back into results matrix
+      // 3. Map modified flat structure back into grid matrix
       for (let j = 0; j < 4; j++) {
         let index = 0;
         if (direction === 'LEFT')  index = i * 4 + j;
@@ -106,7 +173,7 @@ export class Game3 implements OnInit {
         result[index] = line[j];
       }
     }
-    return result;
+    return { newGrid: result, pointsGained };
   }
 
   spawnRandomTile() {
@@ -121,36 +188,82 @@ export class Game3 implements OnInit {
 
   initializeNewGrid() {
     this.session.grid = new Array(16).fill(0);
+    this.session.currentScore = 0;
+    this.movesCount = 0;
+    this.isGameOver = false;
+    this.isVictory = false;
+    this.victoryDismissed = false;
+
     this.spawnRandomTile();
     this.spawnRandomTile();
+
     this.loading = true;
-    this.gameService.saveMove(this.session).subscribe(res => {
-      this.session = res;
-      this.loading = false;
+    this.gameService.saveMove(this.session).subscribe({
+      next: (res) => {
+        this.session = res;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
     });
   }
 
-  // Rule 3: Clear session grid data and reset points to 0 via API
   triggerNewGame() {
     this.loading = true;
-    this.gameService.resetGame().subscribe(() => {
-      this.initializeNewGrid();
+    this.gameService.resetGame().subscribe({
+      next: () => {
+        this.initializeNewGrid();
+      },
+      error: () => {
+        this.initializeNewGrid();
+      }
     });
   }
 
-  // Rule 4: Revert 1 step back via API database stack tracking entries
   triggerUndo() {
-    if (this.loading) return;
+    if (this.loading || this.isGameOver) return;
     this.loading = true;
     this.gameService.undoMove().subscribe({
       next: (revertedSession) => {
         this.session = revertedSession;
         this.loading = false;
+        this.checkGameStatus();
       },
       error: (err) => {
-        console.warn(err.error);
+        console.warn('Undo error:', err);
         this.loading = false;
       }
     });
+  }
+
+  checkGameStatus(): void {
+    // Check Victory (2048 tile)
+    if (!this.victoryDismissed && this.session.grid.includes(2048)) {
+      this.isVictory = true;
+    }
+
+    // Check Game Over (No 0s and no adjacent matching tiles)
+    const hasEmptyCell = this.session.grid.includes(0);
+    if (!hasEmptyCell) {
+      let canMove = false;
+      for (let r = 0; r < 4; r++) {
+        for (let c = 0; c < 4; c++) {
+          const val = this.session.grid[r * 4 + c];
+          // Check right neighbor
+          if (c < 3 && val === this.session.grid[r * 4 + (c + 1)]) canMove = true;
+          // Check bottom neighbor
+          if (r < 3 && val === this.session.grid[(r + 1) * 4 + c]) canMove = true;
+        }
+      }
+      if (!canMove) {
+        this.isGameOver = true;
+      }
+    }
+  }
+
+  dismissVictoryModal(): void {
+    this.isVictory = false;
+    this.victoryDismissed = true;
   }
 }

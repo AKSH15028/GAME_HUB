@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace finalgame.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class GameController : ControllerBase
+    [Route("api/game1")]
+    public class Game1Controller : ControllerBase
     {
         private readonly IDeckService _deckService;
         private readonly IMemoryCache _cache;
@@ -26,7 +26,7 @@ namespace finalgame.Controllers
             public int Strikes { get; set; }
         }
 
-        public GameController(IDeckService deckService, IMemoryCache cache, AppDbContext context)
+        public Game1Controller(IDeckService deckService, IMemoryCache cache, AppDbContext context)
         {
             _deckService = deckService;
             _cache = cache;

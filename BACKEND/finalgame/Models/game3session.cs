@@ -1,9 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Custom2048.API.Models
+namespace finalgame.Models
 {
-    public class GameSession
+    public class Game3Session
     {
         [Key]
         public Guid Id { get; set; }

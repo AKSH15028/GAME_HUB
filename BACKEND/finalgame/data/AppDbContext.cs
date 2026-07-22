@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Custom2048.API.Models;
 using System.Text.Json;
 using finalgame.Models;
 
@@ -14,7 +13,7 @@ namespace finalgame.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserGameProgress> UserGameProgresses { get; set; }
-        public DbSet<GameScores> GameScores { get; set; }
+        public DbSet<Gamescores> GameScores { get; set; }
         public DbSet<Leaderboard> Leaderboard { get; set; }
         public DbSet<Player> Players { get; set; }
 

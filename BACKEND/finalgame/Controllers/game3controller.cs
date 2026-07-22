@@ -1,22 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Custom2048.API.Data;
-using Custom2048.API.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using finalgame.Data;
+using finalgame.Models;
 
-namespace Custom2048.API.Controllers
+namespace finalgame.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class GameController : ControllerBase
+    [Route("api/game3")]
+    public class Game3Controller : ControllerBase
     {
-        private readonly GameDbContext _context;
+        private readonly AppDbContext _context;
         // Hardcoded single-session GUID for simplicity. Replace with user auth tokens if scaled.
         private static readonly Guid DefaultSessionId = Guid.Parse("11111111-1111-1111-1111-111111111111");
 
-        public GameController(GameDbContext context)
+        public Game3Controller(AppDbContext context)
         {
             _context = context;
         }
@@ -25,18 +25,18 @@ namespace Custom2048.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetSession()
         {
-            var session = await _context.GameSessions.FindAsync(DefaultSessionId);
+            var session = await _context.Game3Sessions.FindAsync(DefaultSessionId);
             if (session == null)
             {
                 // Initialize an empty layout if no session exists yet
-                session = new GameSession 
+                session = new Game3Session 
                 { 
                     Id = DefaultSessionId, 
                     Grid = new int[16], 
                     CurrentScore = 0, 
                     UpdatedAt = DateTime.UtcNow 
                 };
-                _context.GameSessions.Add(session);
+                _context.Game3Sessions.Add(session);
                 await _context.SaveChangesAsync();
             }
             return Ok(session);
@@ -44,13 +44,13 @@ namespace Custom2048.API.Controllers
 
         // POST: api/game/move
         [HttpPost("move")]
-        public async Task<IActionResult> SaveMove([FromBody] GameSession updatedState)
+        public async Task<IActionResult> SaveMove([FromBody] Game3Session updatedState)
         {
-            var session = await _context.GameSessions.FindAsync(DefaultSessionId);
+            var session = await _context.Game3Sessions.FindAsync(DefaultSessionId);
             if (session == null) return NotFound();
 
             // 1. Snapshot the CURRENT state into history before applying the new state
-            var historyLog = new GameHistoryLog
+            var historyLog = new Game3MoveHistory
             {
                 Id = Guid.NewGuid(),
                 GameSessionId = session.Id,
@@ -58,7 +58,7 @@ namespace Custom2048.API.Controllers
                 ScoreSnapshot = session.CurrentScore,
                 LoggedAt = DateTime.UtcNow
             };
-            _context.GameHistoryLogs.Add(historyLog);
+            _context.Game3MoveHistories.Add(historyLog);
 
             // 2. Commit the new state incoming from Angular
             session.Grid = updatedState.Grid;
@@ -73,11 +73,11 @@ namespace Custom2048.API.Controllers
         [HttpPost("undo")]
         public async Task<IActionResult> UndoMove()
         {
-            var session = await _context.GameSessions.FindAsync(DefaultSessionId);
+            var session = await _context.Game3Sessions.FindAsync(DefaultSessionId);
             if (session == null) return NotFound();
 
             // Fetch the most recent history log entry
-            var lastLog = await _context.GameHistoryLogs
+            var lastLog = await _context.Game3MoveHistories
                 .Where(h => h.GameSessionId == session.Id)
                 .OrderByDescending(h => h.LoggedAt)
                 .FirstOrDefaultAsync();
@@ -93,7 +93,7 @@ namespace Custom2048.API.Controllers
             session.UpdatedAt = DateTime.UtcNow;
 
             // Remove this step from history stack
-            _context.GameHistoryLogs.Remove(lastLog);
+            _context.Game3MoveHistories.Remove(lastLog);
             await _context.SaveChangesAsync();
 
             return Ok(session);
@@ -103,7 +103,7 @@ namespace Custom2048.API.Controllers
         [HttpPost("reset")]
         public async Task<IActionResult> ResetGame()
         {
-            var session = await _context.GameSessions.FindAsync(DefaultSessionId);
+            var session = await _context.Game3Sessions.FindAsync(DefaultSessionId);
             if (session == null) return NotFound();
 
             // Clear layout & reset score
@@ -112,8 +112,8 @@ namespace Custom2048.API.Controllers
             session.UpdatedAt = DateTime.UtcNow;
 
             // Clear history stack completely for this session
-            var historicalLogs = _context.GameHistoryLogs.Where(h => h.GameSessionId == session.Id);
-            _context.GameHistoryLogs.RemoveRange(historicalLogs);
+            var historicalLogs = _context.Game3MoveHistories.Where(h => h.GameSessionId == session.Id);
+            _context.Game3MoveHistories.RemoveRange(historicalLogs);
 
             await _context.SaveChangesAsync();
             return Ok(session);

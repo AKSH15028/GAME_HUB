@@ -19,7 +19,9 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const loggedInUser = JSON.parse(localStorage.getItem('user') || '{}');
+    const loggedInUser = typeof localStorage !== 'undefined'
+      ? JSON.parse(localStorage.getItem('user') || '{}')
+      : {};
     const currentUserId = loggedInUser.id; 
 
     if (currentUserId) {
