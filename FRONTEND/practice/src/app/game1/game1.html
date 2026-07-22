@@ -26,8 +26,8 @@
       <div class="stat-box">
         <span class="stat-label">
           <span *ngIf="gameState === 'REVEAL'">MEMORIZE TARGET</span>
-          <span *ngIf="gameState === 'GRID'">TRACK TARGET</span>
-          <span *ngIf="gameState === 'GUESS'">WHERE IS IT?</span>
+          <span *ngIf="gameState === 'GRID'">SCAN GRID</span>
+          <span *ngIf="gameState === 'GUESS'">WHERE WAS IT?</span>
           <span *ngIf="gameState === 'RESOLUTION'">EVALUATING...</span>
           <span *ngIf="gameState === 'GAMEOVER'">GAME OVER</span>
         </span>
@@ -56,7 +56,7 @@
   <div class="game-play-area" *ngIf="gameState !== 'GAMEOVER'; else gameOverScreen">
 
     <!-- Left Column: The Target Preview Identity Holder -->
-    <div class="side-column left-side" [style.opacity]="gameState === 'GUESS' ? '0.1' : '1'">
+    <div class="side-column left-side" [style.opacity]="gameState === 'GUESS' ? '0.3' : '1'">
       <span class="column-label">Target Card</span>
       <div class="display-card-box" *ngIf="targetCard">
         <div class="card-wrapper">
@@ -76,7 +76,7 @@
     </div>
 
     <!-- Center Section Grid Core -->
-    <div class="grid-container" [style.opacity]="gameState === 'REVEAL' ? '0.1' : '1'">
+    <div class="grid-container" [style.opacity]="gameState === 'REVEAL' ? '0.4' : '1'">
       <div *ngFor="let card of gridCards" class="card-wrapper" (click)="onCardClick(card)">
         <div class="card-inner" [class.is-flipped]="card.isFlipped">
           
@@ -121,14 +121,14 @@
   <!-- Game Over Screen Template Layout Component Override -->
   <ng-template #gameOverScreen>
     <div class="result-status-box" style="max-width: 400px; margin: 40px auto; padding: 40px 20px;">
-      <h2 class="result-line wrong" style="font-size: 2rem;">CRITICAL BREAKDOWN</h2>
-      <p style="color: #626b7c; margin: 15px 0;">You have sustained two strikes. Memory loop terminated.</p>
+      <h2 class="result-line wrong" style="font-size: 2rem;">GAME OVER</h2>
+      <p style="color: #626b7c; margin: 15px 0;">You sustained two strikes. Memory loop terminated.</p>
       <div class="stat-box" style="margin-bottom: 25px;">
         <span class="stat-label">FINAL SCORE</span>
         <span class="stat-value neon-green">{{ score }}</span>
       </div>
       <button class="leaderboard-btn" style="font-size: 1rem; padding: 10px 24px;" (click)="startNewGame()">
-        REBOOT SYSTEM
+        PLAY AGAIN
       </button>
     </div>
   </ng-template>
@@ -136,6 +136,6 @@
   <!-- Navigation Bar Footer Segment Wrapper -->
   <div class="top-nav-bar">
     <span class="player-name-label">Operator: {{ username }}</span>
-    <a href="/profile" class="leaderboard-btn">BACK TO PROFILE</a>
+    <a href="/game" class="leaderboard-btn">BACK TO GAMES HUB</a>
   </div>
 </div>

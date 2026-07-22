@@ -25,27 +25,42 @@ export class Game1Service {
     const url = `${this.apiUrl}/start?sessionId=${sessionId}&currentScore=${currentScore}&currentStreak=${currentStreak}&currentStrikes=${currentStrikes}`;
     return this.http.post<GameSession>(url, {}).pipe(
       catchError(() => {
-        // Fallback local round generator
+        // Fallback local deck generator if backend is unavailable
         const grid: Card[] = [];
+        const themes = [
+          { border: 'neon-border-red', text: 'red-text' },
+          { border: 'neon-border-cyan', text: 'cyan-text' },
+          { border: 'neon-border-green', text: 'green-text' },
+          { border: 'neon-border-purple', text: 'purple-text' }
+        ];
+
         for (let i = 0; i < 9; i++) {
-          const suit = this.suits[Math.floor(Math.random() * this.suits.length)];
-          const rank = this.ranks[Math.floor(Math.random() * this.ranks.length)];
+          const suit = this.suits[i % this.suits.length];
+          const rank = this.ranks[i % this.ranks.length];
           const isRed = suit === '♥' || suit === '♦';
+          const theme = isRed ? themes[0] : themes[1 + (i % 3)];
+
           grid.push({
             cardId: i,
             suit,
             rank,
-            themeColor: isRed ? 'neon-border-red' : 'neon-border-cyan',
-            textColor: isRed ? 'text-red' : 'text-cyan',
+            themeColor: theme.border,
+            textColor: theme.text,
             isFlipped: false
           });
         }
+
+        // Shuffle grid
+        grid.sort(() => 0.5 - Math.random());
+        // Re-assign cardId after shuffle
+        grid.forEach((c, idx) => c.cardId = idx);
+
         const targetIdx = Math.floor(Math.random() * 9);
         this.activeTargetCard = grid[targetIdx];
 
         const fallbackSession: GameSession = {
           gameSessionId: sessionId || 'local-' + Date.now(),
-          targetCard: grid[targetIdx],
+          targetCard: { ...grid[targetIdx] },
           gridCards: grid
         };
         return of(fallbackSession);
@@ -58,7 +73,7 @@ export class Game1Service {
       catchError(() => {
         const isCorrect = this.activeTargetCard ? payload.selectedCardId === this.activeTargetCard.cardId : true;
         const correctCardId = this.activeTargetCard ? this.activeTargetCard.cardId : payload.selectedCardId;
-        const points = isCorrect ? 50 + payload.secondsRemaining * 10 : 0;
+        const points = isCorrect ? 50 + Math.max(0, payload.secondsRemaining) * 10 : 0;
 
         return of({
           isCorrect,

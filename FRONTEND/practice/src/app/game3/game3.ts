@@ -41,7 +41,6 @@ export class Game3 implements OnInit {
         this.session = data;
         this.loading = false;
 
-        // If fetched board is completely blank, initialize new grid with 2 random tiles
         if (!this.session.grid || this.session.grid.every(val => val === 0)) {
           this.initializeNewGrid();
         } else {
@@ -49,7 +48,6 @@ export class Game3 implements OnInit {
         }
       },
       error: () => {
-        // Fallback local session if backend fails
         this.loading = false;
         this.initializeNewGrid();
       }
@@ -59,7 +57,7 @@ export class Game3 implements OnInit {
   // Handle slide inputs via keyboard arrow keys & WASD
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (this.loading || this.isGameOver) return;
+    if (this.isGameOver) return;
 
     let direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null = null;
     switch (event.key) {
@@ -92,7 +90,7 @@ export class Game3 implements OnInit {
   }
 
   processMove(direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') {
-    if (this.loading || this.isGameOver) return;
+    if (this.isGameOver) return;
 
     const currentGrid = [...this.session.grid];
     const { newGrid, pointsGained } = this.executeSlide(currentGrid, direction);
@@ -101,6 +99,7 @@ export class Game3 implements OnInit {
     const isMoveValid = JSON.stringify(currentGrid) !== JSON.stringify(newGrid);
 
     if (isMoveValid) {
+      // 1. Immediately apply grid transformation & score update on frontend
       this.session.grid = newGrid;
       this.session.currentScore += pointsGained;
       this.movesCount += 1;
@@ -112,26 +111,25 @@ export class Game3 implements OnInit {
         }
       }
 
-      // Spawn a random tile (2 or 4) into an empty cell
+      // 2. Spawn a random tile (2 or 4) into an empty cell
       this.spawnRandomTile();
 
+      // 3. Evaluate Victory & Game Over status immediately
       this.checkGameStatus();
 
-      // Transmit updated layout to API backend
-      this.loading = true;
+      // 4. Save to backend asynchronously in the background WITHOUT setting loading = true or blocking input
       this.gameService.saveMove(this.session).subscribe({
         next: (updatedSession) => {
-          this.session = updatedSession;
-          this.loading = false;
+          // Sync ID if needed
+          if (updatedSession && updatedSession.id) this.session.id = updatedSession.id;
         },
         error: () => {
-          this.loading = false;
+          // Ignore background sync errors so gameplay remains silky smooth
         }
       });
     }
   }
 
-  // Pure function mechanics implementing 2048 line manipulation & score points
   executeSlide(grid: number[], direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT'): { newGrid: number[], pointsGained: number } {
     let result = [...grid];
     let pointsGained = 0;
@@ -139,7 +137,6 @@ export class Game3 implements OnInit {
     for (let i = 0; i < 4; i++) {
       let line: number[] = [];
       
-      // 1. Extract columns or rows as flat arrays
       for (let j = 0; j < 4; j++) {
         let index = 0;
         if (direction === 'LEFT')  index = i * 4 + j;
@@ -149,12 +146,11 @@ export class Game3 implements OnInit {
         line.push(result[index]);
       }
 
-      // 2. Compress zero elements out, merge matching adjacent pairs
       line = line.filter(val => val !== 0);
       for (let j = 0; j < line.length - 1; j++) {
         if (line[j] === line[j + 1]) {
           line[j] *= 2;
-          pointsGained += line[j]; // Score increases by merged tile value!
+          pointsGained += line[j];
           line[j + 1] = 0;
         }
       }
@@ -163,7 +159,6 @@ export class Game3 implements OnInit {
         line.push(0);
       }
 
-      // 3. Map modified flat structure back into grid matrix
       for (let j = 0; j < 4; j++) {
         let index = 0;
         if (direction === 'LEFT')  index = i * 4 + j;
@@ -197,62 +192,49 @@ export class Game3 implements OnInit {
     this.spawnRandomTile();
     this.spawnRandomTile();
 
-    this.loading = true;
     this.gameService.saveMove(this.session).subscribe({
       next: (res) => {
-        this.session = res;
-        this.loading = false;
+        if (res && res.grid) this.session = res;
       },
-      error: () => {
-        this.loading = false;
-      }
+      error: () => {}
     });
   }
 
   triggerNewGame() {
-    this.loading = true;
+    this.initializeNewGrid();
     this.gameService.resetGame().subscribe({
-      next: () => {
-        this.initializeNewGrid();
-      },
-      error: () => {
-        this.initializeNewGrid();
-      }
+      next: () => {},
+      error: () => {}
     });
   }
 
   triggerUndo() {
-    if (this.loading || this.isGameOver) return;
-    this.loading = true;
+    if (this.isGameOver) return;
     this.gameService.undoMove().subscribe({
       next: (revertedSession) => {
-        this.session = revertedSession;
-        this.loading = false;
-        this.checkGameStatus();
+        if (revertedSession && revertedSession.grid) {
+          this.session = revertedSession;
+          this.checkGameStatus();
+        }
       },
       error: (err) => {
         console.warn('Undo error:', err);
-        this.loading = false;
       }
     });
   }
 
   checkGameStatus(): void {
-    // Check Victory (2048 tile)
     if (!this.victoryDismissed && this.session.grid.includes(2048)) {
       this.isVictory = true;
     }
 
-    // Check Game Over (No 0s and no adjacent matching tiles)
     const hasEmptyCell = this.session.grid.includes(0);
     if (!hasEmptyCell) {
       let canMove = false;
       for (let r = 0; r < 4; r++) {
         for (let c = 0; c < 4; c++) {
           const val = this.session.grid[r * 4 + c];
-          // Check right neighbor
           if (c < 3 && val === this.session.grid[r * 4 + (c + 1)]) canMove = true;
-          // Check bottom neighbor
           if (r < 3 && val === this.session.grid[(r + 1) * 4 + c]) canMove = true;
         }
       }

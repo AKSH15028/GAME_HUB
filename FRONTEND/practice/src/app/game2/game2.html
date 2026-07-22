@@ -117,13 +117,18 @@
         </button>
       </div>
 
-      <!-- Feedback Explanation Box -->
+      <!-- Feedback Explanation Box & Manual Next Button -->
       <div class="feedback-banner" *ngIf="gameState === 'FEEDBACK' && lastResult" [class.is-correct]="lastResult.isCorrect">
-        <div class="verdict">
-          <span *ngIf="lastResult.isCorrect">🎉 CORRECT! (+{{ lastResult.pointsEarned }} pts)</span>
-          <span *ngIf="!lastResult.isCorrect">❌ INCORRECT</span>
+        <div class="feedback-content">
+          <div class="verdict">
+            <span *ngIf="lastResult.isCorrect">🎉 CORRECT! (+{{ lastResult.pointsEarned }} pts)</span>
+            <span *ngIf="!lastResult.isCorrect">❌ INCORRECT</span>
+          </div>
+          <p class="explanation-text">{{ lastResult.explanation }}</p>
         </div>
-        <p class="explanation-text">{{ lastResult.explanation }}</p>
+        <button class="next-q-btn" (click)="nextQuestion()">
+          NEXT QUESTION &rarr;
+        </button>
       </div>
     </div>
   </div>

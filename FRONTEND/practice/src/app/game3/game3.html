@@ -30,11 +30,11 @@
       </div>
 
       <div class="action-buttons">
-        <button class="icon-btn undo-btn" (click)="triggerUndo()" [disabled]="loading || isGameOver" title="Undo Move">
+        <button class="icon-btn undo-btn" (click)="triggerUndo()" [disabled]="isGameOver" title="Undo Move">
           <span>&#x21BA; Undo</span>
         </button>
 
-        <button class="reset-btn" (click)="triggerNewGame()" [disabled]="loading">
+        <button class="reset-btn" (click)="triggerNewGame()">
           <span>New Game</span>
         </button>
       </div>
@@ -47,7 +47,7 @@
 
     <!-- 4x4 Grid Board Matrix -->
     <div class="board-wrapper">
-      <div class="grid-board" [class.disabled]="loading">
+      <div class="grid-board">
         <div 
           *ngFor="let tile of session?.grid" 
           class="grid-cell"
@@ -82,12 +82,12 @@
     <!-- On-Screen Arrow Controls for Mobile & Mouse users -->
     <div class="control-pad">
       <div class="pad-row">
-        <button class="pad-btn up" (click)="processMove('UP')" [disabled]="loading || isGameOver">▲</button>
+        <button class="pad-btn up" (click)="processMove('UP')" [disabled]="isGameOver">▲</button>
       </div>
       <div class="pad-row middle">
-        <button class="pad-btn left" (click)="processMove('LEFT')" [disabled]="loading || isGameOver">◄</button>
-        <button class="pad-btn down" (click)="processMove('DOWN')" [disabled]="loading || isGameOver">▼</button>
-        <button class="pad-btn right" (click)="processMove('RIGHT')" [disabled]="loading || isGameOver">►</button>
+        <button class="pad-btn left" (click)="processMove('LEFT')" [disabled]="isGameOver">◄</button>
+        <button class="pad-btn down" (click)="processMove('DOWN')" [disabled]="isGameOver">▼</button>
+        <button class="pad-btn right" (click)="processMove('RIGHT')" [disabled]="isGameOver">►</button>
       </div>
     </div>
 

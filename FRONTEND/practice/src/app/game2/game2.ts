@@ -31,6 +31,7 @@ export class Game2 implements OnInit, OnDestroy {
 
   timerValue: number = 15;
   private timerSubscription?: Subscription;
+  private autoNextTimeout?: any;
 
   selectedOptionIndex: number | null = null;
   lastResult: QuizAnswerResult | null = null;
@@ -57,6 +58,7 @@ export class Game2 implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopTimer();
+    if (this.autoNextTimeout) clearTimeout(this.autoNextTimeout);
   }
 
   selectCategoryAndStart(cat: string): void {
@@ -75,18 +77,22 @@ export class Game2 implements OnInit, OnDestroy {
     this.quizService.getQuestions(this.selectedCategory, 8).subscribe({
       next: (qList) => {
         this.questions = qList;
-        if (this.questions.length > 0) {
+        if (this.questions && this.questions.length > 0) {
           this.loadQuestion(0);
         } else {
           this.gameState = 'CATEGORY';
         }
       },
-      error: (err) => console.error('Failed to load quiz questions', err)
+      error: () => {
+        this.gameState = 'CATEGORY';
+      }
     });
   }
 
   loadQuestion(index: number): void {
     this.stopTimer();
+    if (this.autoNextTimeout) clearTimeout(this.autoNextTimeout);
+
     this.currentIndex = index;
     this.currentQuestion = this.questions[index];
     this.selectedOptionIndex = null;
@@ -108,7 +114,6 @@ export class Game2 implements OnInit, OnDestroy {
         },
         complete: () => {
           if (this.gameState === 'QUESTION') {
-            // Time out evaluated as wrong answer (-1 selection)
             this.submitOption(-1);
           }
         }
@@ -128,38 +133,48 @@ export class Game2 implements OnInit, OnDestroy {
     this.selectedOptionIndex = optionIndex;
     this.gameState = 'FEEDBACK';
 
-    const payload = {
-      questionId: this.currentQuestion.id,
+    const q = this.currentQuestion;
+    const correctIdx = q.correctOptionIndex !== undefined ? q.correctOptionIndex : 0;
+    const isCorrect = optionIndex === correctIdx;
+    
+    let points = 0;
+    if (isCorrect) {
+      points = 100 + Math.max(0, this.timerValue) * 15 + this.streak * 25;
+      this.score += points;
+      this.streak += 1;
+      this.correctAnswersCount += 1;
+      if (this.streak > this.maxStreak) this.maxStreak = this.streak;
+    } else {
+      this.streak = 0;
+    }
+
+    this.lastResult = {
+      isCorrect,
+      correctOptionIndex: correctIdx,
+      pointsEarned: points,
+      explanation: q.explanation || (isCorrect ? 'Correct answer!' : `The correct answer was option ${['A', 'B', 'C', 'D'][correctIdx]}.`)
+    };
+
+    // Also notify backend in background
+    this.quizService.submitAnswer({
+      questionId: q.id,
       selectedOptionIndex: optionIndex,
       secondsRemaining: this.timerValue,
       currentStreak: this.streak,
       username: this.username
-    };
+    }).subscribe({ next: () => {}, error: () => {} });
 
-    this.quizService.submitAnswer(payload).subscribe({
-      next: (result) => {
-        this.lastResult = result;
-        if (result.isCorrect) {
-          this.score += result.pointsEarned;
-          this.streak += 1;
-          this.correctAnswersCount += 1;
-          if (this.streak > this.maxStreak) this.maxStreak = this.streak;
-        } else {
-          this.streak = 0;
-        }
-
-        setTimeout(() => {
-          this.nextQuestion();
-        }, 2200);
-      },
-      error: (err) => {
-        console.error('Error submitting answer', err);
-        setTimeout(() => this.nextQuestion(), 2000);
+    // Auto advance after 2.5 seconds if user doesn't click "Next Question"
+    if (this.autoNextTimeout) clearTimeout(this.autoNextTimeout);
+    this.autoNextTimeout = setTimeout(() => {
+      if (this.gameState === 'FEEDBACK') {
+        this.nextQuestion();
       }
-    });
+    }, 2500);
   }
 
   nextQuestion(): void {
+    if (this.autoNextTimeout) clearTimeout(this.autoNextTimeout);
     if (this.currentIndex + 1 < this.questions.length) {
       this.loadQuestion(this.currentIndex + 1);
     } else {
@@ -167,15 +182,12 @@ export class Game2 implements OnInit, OnDestroy {
     }
   }
 
-  // Lifeline Actions
   useFiftyFifty(): void {
     if (this.lifelines.fiftyFiftyUsed || this.gameState !== 'QUESTION' || !this.currentQuestion) return;
     this.lifelines.fiftyFiftyUsed = true;
 
-    // Find 2 incorrect indices to hide
     const correctIdx = this.currentQuestion.correctOptionIndex ?? 0;
     const incorrectIndices = [0, 1, 2, 3].filter(idx => idx !== correctIdx);
-    // Shuffle and pick 2
     incorrectIndices.sort(() => 0.5 - Math.random());
     this.hiddenOptionIndices = incorrectIndices.slice(0, 2);
   }

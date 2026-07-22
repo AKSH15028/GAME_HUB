@@ -14,7 +14,7 @@ import { GameSession, GuessPayload, GuessResult, Card } from '../game1model';
 })
 export class Game1 implements OnInit, OnDestroy {
 
-  username: string = 'CyberPlayer'; // Replace this with a dynamic user lookup later
+  username: string = 'CyberPlayer';
   currentSessionId: string = '';
   score: number = 0;
   round: number = 1;
@@ -26,7 +26,7 @@ export class Game1 implements OnInit, OnDestroy {
   targetCard: Card | null = null;
   gridCards: Card[] = [];
 
-  // State Machine control flags
+  // State Machine control flags: 'REVEAL' | 'GRID' | 'GUESS' | 'RESOLUTION' | 'GAMEOVER'
   gameState: 'REVEAL' | 'GRID' | 'GUESS' | 'RESOLUTION' | 'GAMEOVER' = 'REVEAL';
   resultText: string = '—';
   resultClass: string = 'waiting';
@@ -38,6 +38,14 @@ export class Game1 implements OnInit, OnDestroy {
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
+    const userStr = typeof localStorage !== 'undefined' ? localStorage.getItem('user') : null;
+    if (userStr) {
+      try {
+        const u = JSON.parse(userStr);
+        if (u.username) this.username = u.username;
+      } catch (e) {}
+    }
+
     this.startNewGame();
   }
 
@@ -60,20 +68,28 @@ export class Game1 implements OnInit, OnDestroy {
     this.resultText = '—';
     this.resultClass = 'waiting';
 
-    // Call our .NET API to provision a fresh obfuscated round arrangement
     this.gameService.startRound(this.currentSessionId, this.score, this.streak, this.strikes)
       .subscribe({
         next: (session: GameSession) => {
-          this.currentSessionId = session.gameSessionId;
-          this.targetCard = session.targetCard;
-          
-          // Force all backend cards to be explicitly face-up initially on the frontend
-          this.gridCards = session.gridCards.map((card: any) => ({ ...card, isFlipped: false }));
-          
-          this.runTargetRevealPhase();
+          this.setupRoundData(session);
         },
-        error: (err: any) => console.error('Failed to provision...', err)
+        error: (err: any) => {
+          console.error('API error starting round, generating fallback local round...', err);
+        }
       });
+  }
+
+  private setupRoundData(session: GameSession): void {
+    this.currentSessionId = session.gameSessionId;
+    this.targetCard = session.targetCard;
+    
+    // Ensure all grid cards start explicitly face-up (isFlipped = false)
+    this.gridCards = session.gridCards.map((card: any) => ({
+      ...card,
+      isFlipped: false
+    }));
+    
+    this.runTargetRevealPhase();
   }
 
   // Phase 1: Target Reveal (3 Seconds Focus Duration)
@@ -86,12 +102,12 @@ export class Game1 implements OnInit, OnDestroy {
     });
   }
 
-  // Phase 2: Grid Layout Phase (10 Seconds Location Scan Track)
+  // Phase 2: Grid Layout Scan Phase (5 Seconds Location Track)
   runGridLayoutPhase(): void {
     this.gameState = 'GRID';
-    this.timerValue = 10;
+    this.timerValue = 5;
     
-    this.startCountdown(10, () => {
+    this.startCountdown(5, () => {
       this.runFlipAndGuessPhase();
     });
   }
@@ -101,18 +117,17 @@ export class Game1 implements OnInit, OnDestroy {
     this.gameState = 'GUESS';
     this.timerValue = 10;
 
-    // Concurrently trigger the 3D visual rotation class on all grid cards
+    // Flip all grid cards face-down
     this.gridCards.forEach(card => card.isFlipped = true);
 
     this.startCountdown(10, () => {
-      // If timer bottoms out before user makes a decision, force handle an empty wrong selection
+      // If timer bottoms out, evaluate time out as incorrect guess
       this.handleGuessEvaluation(-1);
     });
   }
 
   // User Guess Submission Point
   onCardClick(clickedCard: Card): void {
-    // Blocks interaction if the user isn't strictly in the guessing timeline phase
     if (this.gameState !== 'GUESS') return;
     
     this.stopTimer();
@@ -135,47 +150,71 @@ export class Game1 implements OnInit, OnDestroy {
         this.streak = result.currentStreak;
         this.strikes = result.strikes;
 
-        // Force all cards to flip back open so the user sees where everything sat
+        // Force all cards to flip back face-up so player sees where everything sat
         this.gridCards.forEach(card => card.isFlipped = false);
 
         if (result.isCorrect) {
-          this.resultText = 'Correct';
+          this.resultText = 'CORRECT!';
           this.resultClass = 'correct';
           
-          // Apply an explicit positive visual feedback ring color back onto their selected item choice
           const matchingCard = this.gridCards.find(c => c.cardId === selectedCardId);
           if (matchingCard) matchingCard.themeColor = 'neon-border-green';
         } else {
-          this.resultText = 'Wrong';
+          this.resultText = 'WRONG!';
           this.resultClass = 'wrong';
 
-          // Apply error highlighted border markers to show context correction paths
           const incorrectCard = this.gridCards.find(c => c.cardId === selectedCardId);
           if (incorrectCard) incorrectCard.themeColor = 'neon-border-red';
         }
 
-        // Evaluate next routing condition choices
         setTimeout(() => {
-          if (result.isGameOver) {
+          if (result.isGameOver || this.strikes >= 2) {
             this.gameState = 'GAMEOVER';
           } else {
             this.round += 1;
             this.loadNextRound();
           }
-        }, 2500); // 2.5 second dramatic delay pause window
+        }, 2200);
       },
-      error: (err: any) => console.error('Error evaluating response authorization sequence:', err)
+      error: (err: any) => {
+        console.error('Error evaluating guess:', err);
+        // Fallback local evaluation
+        this.gridCards.forEach(card => card.isFlipped = false);
+        const isMatch = this.targetCard ? selectedCardId === this.targetCard.cardId : false;
+        
+        if (isMatch) {
+          this.score += 100;
+          this.resultText = 'CORRECT!';
+          this.resultClass = 'correct';
+        } else {
+          this.strikes += 1;
+          this.resultText = 'WRONG!';
+          this.resultClass = 'wrong';
+        }
+
+        setTimeout(() => {
+          if (this.strikes >= 2) {
+            this.gameState = 'GAMEOVER';
+          } else {
+            this.round += 1;
+            this.loadNextRound();
+          }
+        }, 2200);
+      }
     });
   }
 
-  // Timer Core Assistant Logic
   private startCountdown(durationSeconds: number, onComplete: () => void): void {
     this.stopTimer();
+    this.timerValue = durationSeconds;
+
     this.timerSubscription = interval(1000)
       .pipe(take(durationSeconds))
       .subscribe({
         next: () => {
-          this.timerValue -= 1;
+          if (this.timerValue > 0) {
+            this.timerValue -= 1;
+          }
         },
         complete: () => {
           onComplete();
