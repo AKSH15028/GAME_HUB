@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({ 
   selector: 'app-setting',
   standalone: true, // Assuming you are using standalone components based on your folder structure
-  imports: [HttpClientModule], // Ensure HttpClientModule is imported if needed
+  imports: [HttpClientModule, RouterLink], // Ensure HttpClientModule is imported if needed
   templateUrl: './setting.html',
   styleUrls: ['./setting.css']
  })

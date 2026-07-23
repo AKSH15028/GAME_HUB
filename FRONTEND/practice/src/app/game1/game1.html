@@ -2,7 +2,7 @@
   <div class="scoreboard-wrapper">
     <div class="title-header-container">
        <h1 class="game-title">Mind Cards</h1>
-       <a href="/home" class="home-link">HOME</a>
+       <a routerLink="/home" class="home-link">HOME</a>
     </div>
   
     <div class="stats-capsule">
@@ -100,12 +100,10 @@
       </div>
 
       <!-- HUD Target Brackets inside grid-container -->
-      <div>
-        <div class="target-bracket tl"></div>
-        <div class="target-bracket tr"></div>
-        <div class="target-bracket bl"></div>
-        <div class="target-bracket br"></div>
-      </div>
+      <div class="target-bracket tl"></div>
+      <div class="target-bracket tr"></div>
+      <div class="target-bracket bl"></div>
+      <div class="target-bracket br"></div>
     </div>
 
     <!-- Right Side Column Panel: Verdict Outputs -->
@@ -136,6 +134,6 @@
   <!-- Navigation Bar Footer Segment Wrapper -->
   <div class="top-nav-bar">
     <span class="player-name-label">Operator: {{ username }}</span>
-    <a href="/game" class="leaderboard-btn">BACK TO GAMES HUB</a>
+    <a routerLink="/game" class="leaderboard-btn">BACK TO GAMES HUB</a>
   </div>
 </div>

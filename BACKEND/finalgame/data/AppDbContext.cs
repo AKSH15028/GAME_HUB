@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using finalgame.Models;
@@ -45,15 +45,15 @@ namespace finalgame.Data
             modelBuilder.Entity<Game3Session>()
                 .Property(g => g.Grid)
                 .HasConversion(
-                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<int[]>(v, (JsonSerializerOptions)null) ?? new int[16]
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                    v => JsonSerializer.Deserialize<int[]>(v, (JsonSerializerOptions?)null) ?? new int[16]
                 );
 
             modelBuilder.Entity<Game3MoveHistory>()
                 .Property(g => g.GridSnapshot)
                 .HasConversion(
-                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<int[]>(v, (JsonSerializerOptions)null) ?? new int[16]
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                    v => JsonSerializer.Deserialize<int[]>(v, (JsonSerializerOptions?)null) ?? new int[16]
                 );
         }
     }

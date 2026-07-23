@@ -7,8 +7,8 @@
     </div>
     <div class="header-actions">
       <span class="user-badge">👤 {{ username }}</span>
-      <a href="/home" class="nav-btn">HOME</a>
-      <a href="/game" class="nav-btn highlight">GAMES HUB</a>
+      <a routerLink="/home" class="nav-btn">HOME</a>
+      <a routerLink="/game" class="nav-btn highlight">GAMES HUB</a>
     </div>
   </header>
 
@@ -65,7 +65,7 @@
 
     <!-- Timer Progress Bar -->
     <div class="timer-bar-container">
-      <div class="timer-bar-fill" [style.width.%]="(timerValue / 15) * 100"></div>
+      <div class="timer-bar-fill" [style.width.%]="timerValue > 15 ? 100 : (timerValue / 15) * 100"></div>
     </div>
 
     <!-- Lifelines Panel -->
@@ -164,7 +164,7 @@
 
     <div class="results-actions">
       <button class="action-btn primary" (click)="gameState = 'CATEGORY'">PLAY AGAIN</button>
-      <a href="/game" class="action-btn secondary">RETURN TO GAMES HUB</a>
+      <a routerLink="/game" class="action-btn secondary">RETURN TO GAMES HUB</a>
     </div>
   </div>
 </div>

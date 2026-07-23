@@ -7,25 +7,25 @@
     </div>
     <ul>
   <!-- Redirects to a new page -->
-  <li><a href="/home" class="nav-link">Home</a></li>
-  <li><a href="/profile" class="nav-link">Profile</a></li>
+  <li><a routerLink="/home" class="nav-link">Home</a></li>
+  <li><a routerLink="/profile" class="nav-link">Profile</a></li>
   
   <!-- Scrolls to the section on the same page -->
 <!-- Instead of just #notifications, use the current page path + #id -->
-<li><a href="/settings#notifications" class="nav-link">Notifications</a></li>
-<li><a href="/settings#account" class="nav-link">Account</a></li>
+<li><a routerLink="/settings" fragment="notifications" class="nav-link">Notifications</a></li>
+<li><a routerLink="/settings" fragment="account" class="nav-link">Account</a></li>
 
   
   <li class="has-submenu">
     Appearance <span>^</span>
     <ul class="submenu">
-      <li><a href="/settings#appearance" class="nav-link">Theme</a></li>
-      <li><a href="/settings#appearance" class="nav-link">Font Size</a></li>
+      <li><a routerLink="/settings" fragment="appearance" class="nav-link">Theme</a></li>
+      <li><a routerLink="/settings" fragment="appearance" class="nav-link">Font Size</a></li>
     </ul>
   </li>
   <li>Developer</li>
   <li>Terms & condition</li>
-  <li><a href="/settings#logout" class="nav-link">Logout</a></li>
+  <li><a routerLink="/settings" fragment="logout" class="nav-link">Logout</a></li>
 </ul>
   </nav>
 

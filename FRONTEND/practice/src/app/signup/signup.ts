@@ -30,7 +30,7 @@ export class Signup {
     this.http.post('http://localhost:5238/api/auth/register', signupData)
       .subscribe(response => {
         console.log('Registration successful', response);
-        this.router.navigate(['/game']);
+        this.router.navigate(['/login']);
       }, error => {
         console.error('Registration failed', error);
       });

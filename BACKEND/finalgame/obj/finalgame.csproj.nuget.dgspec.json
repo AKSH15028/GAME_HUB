@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\backend\\finalgame\\finalgame.csproj": {}
+    "D:\\FullStack_Development\\IITM\\GitHubRepo\\New_gaming_Hub-tech\\GAME_HUB\\Backend\\finalgame\\finalgame.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\backend\\finalgame\\finalgame.csproj": {
+    "D:\\FullStack_Development\\IITM\\GitHubRepo\\New_gaming_Hub-tech\\GAME_HUB\\Backend\\finalgame\\finalgame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\backend\\finalgame\\finalgame.csproj",
+        "projectUniqueName": "D:\\FullStack_Development\\IITM\\GitHubRepo\\New_gaming_Hub-tech\\GAME_HUB\\Backend\\finalgame\\finalgame.csproj",
         "projectName": "finalgame",
-        "projectPath": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\backend\\finalgame\\finalgame.csproj",
-        "packagesPath": "C:\\Users\\Aksh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Aksh\\Desktop\\GAME_HUB\\backend\\finalgame\\obj\\",
+        "projectPath": "D:\\FullStack_Development\\IITM\\GitHubRepo\\New_gaming_Hub-tech\\GAME_HUB\\Backend\\finalgame\\finalgame.csproj",
+        "packagesPath": "C:\\Users\\soura\\.nuget\\packages\\",
+        "outputPath": "D:\\FullStack_Development\\IITM\\GitHubRepo\\New_gaming_Hub-tech\\GAME_HUB\\Backend\\finalgame\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Aksh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\soura\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -101,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

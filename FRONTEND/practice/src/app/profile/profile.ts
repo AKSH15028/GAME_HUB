@@ -1,11 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; // 1. Import ChangeDetectorRef
 import { ProfileService } from '../services/profile';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -22,15 +23,19 @@ export class ProfileComponent implements OnInit {
     const loggedInUser = typeof localStorage !== 'undefined'
       ? JSON.parse(localStorage.getItem('user') || '{}')
       : {};
+    this.user = loggedInUser;
     const currentUserId = loggedInUser.id; 
 
     if (currentUserId) {
-      this.profileService.getProfile(currentUserId).subscribe(data => {
-        console.log("User Data Received from Backend:", data);
-        this.user = data;
-        
-        // 3. Force Angular to update the HTML immediately
-        this.cdr.detectChanges(); 
+      this.profileService.getProfile(currentUserId).subscribe({
+        next: (data) => {
+          console.log("User Data Received from Backend:", data);
+          if (data) this.user = { ...this.user, ...data };
+          this.cdr.detectChanges(); 
+        },
+        error: (err) => {
+          console.warn("Backend profile load failed, using local user state.", err);
+        }
       });
     }
   }

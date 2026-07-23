@@ -47,7 +47,8 @@
 .scoreboard-wrapper {
   background-color: #1a1d24; /* Dark canvas background */
   padding: 20px;
-  width: 1600px;
+  width: 100%;
+  max-width: 950px;
   margin: 0 auto;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   text-align: center;
@@ -255,32 +256,30 @@
   text-shadow: none;
 }
 
-/* Center Grid Configuration override */
+/* Center Grid Configuration */
 .grid-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  width: 100%;
-  max-width: 380px; /* Keeps the center play matrix compact */
-  padding: 15px;
-  background-color: #1a1d24;
-  box-sizing: border-box;
-}
-/* Container platform for the 3x3 Grid */
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  max-width: 400px;
+  gap: 12px;
+  width: 360px;
+  max-width: 100%;
+  flex-shrink: 0;
+  position: relative;
   margin: 0 auto;
-  padding: 20px;
-  /* Base dark canvas */
+  padding: 16px;
+  background-color: #22262f;
+  border: 1.5px solid #2e3542;
+  border-radius: 16px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* 3D Environment Anchor */
 .card-wrapper {
   position: relative;
+  width: 100%;
   aspect-ratio: 2.5 / 3.5;
+  min-height: 110px;
   perspective: 1000px; /* Required for 3D depth perception */
 }
 

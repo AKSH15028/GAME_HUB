@@ -1,5 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Game2QuizService, QuizQuestion, QuizAnswerResult } from '../services/game2quizservices';
@@ -7,7 +8,7 @@ import { Game2QuizService, QuizQuestion, QuizAnswerResult } from '../services/ga
 @Component({
   selector: 'app-game2',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './game2.html',
   styleUrl: './game2.css'
 })
@@ -44,7 +45,7 @@ export class Game2 implements OnInit, OnDestroy {
   };
   hiddenOptionIndices: number[] = [];
 
-  constructor(private quizService: Game2QuizService) {}
+  constructor(private quizService: Game2QuizService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     const userStr = typeof localStorage !== 'undefined' ? localStorage.getItem('user') : null;
@@ -82,9 +83,11 @@ export class Game2 implements OnInit, OnDestroy {
         } else {
           this.gameState = 'CATEGORY';
         }
+        this.cdr.detectChanges();
       },
       error: () => {
         this.gameState = 'CATEGORY';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -101,18 +104,25 @@ export class Game2 implements OnInit, OnDestroy {
     this.gameState = 'QUESTION';
     this.timerValue = 15;
 
+    this.cdr.detectChanges();
     this.startTimer();
   }
 
   private startTimer(): void {
     this.stopTimer();
+    this.cdr.detectChanges();
+
     this.timerSubscription = interval(1000)
       .pipe(take(this.timerValue))
       .subscribe({
         next: () => {
-          this.timerValue -= 1;
+          if (this.timerValue > 0) {
+            this.timerValue -= 1;
+          }
+          this.cdr.detectChanges();
         },
         complete: () => {
+          this.cdr.detectChanges();
           if (this.gameState === 'QUESTION') {
             this.submitOption(-1);
           }
@@ -155,6 +165,8 @@ export class Game2 implements OnInit, OnDestroy {
       explanation: q.explanation || (isCorrect ? 'Correct answer!' : `The correct answer was option ${['A', 'B', 'C', 'D'][correctIdx]}.`)
     };
 
+    this.cdr.detectChanges();
+
     // Also notify backend in background
     this.quizService.submitAnswer({
       questionId: q.id,
@@ -179,6 +191,7 @@ export class Game2 implements OnInit, OnDestroy {
       this.loadQuestion(this.currentIndex + 1);
     } else {
       this.gameState = 'RESULTS';
+      this.cdr.detectChanges();
     }
   }
 
@@ -190,6 +203,7 @@ export class Game2 implements OnInit, OnDestroy {
     const incorrectIndices = [0, 1, 2, 3].filter(idx => idx !== correctIdx);
     incorrectIndices.sort(() => 0.5 - Math.random());
     this.hiddenOptionIndices = incorrectIndices.slice(0, 2);
+    this.cdr.detectChanges();
   }
 
   useSkip(): void {

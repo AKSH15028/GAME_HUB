@@ -91,8 +91,10 @@ namespace finalgame.Controllers
 
         private bool VerifyPassword(string password, string storedHash)
         {
-            // Implementation: Use BCrypt.Net or PasswordHasher<T> here
-            return true; // Simplified placeholder
+            if (string.IsNullOrEmpty(storedHash) || string.IsNullOrEmpty(password)) return false;
+            var hasher = new PasswordHasher<User>();
+            var result = hasher.VerifyHashedPassword(null!, storedHash, password);
+            return result != PasswordVerificationResult.Failed;
         }
 
     [HttpPost("logout")]
